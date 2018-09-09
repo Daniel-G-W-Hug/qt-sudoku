@@ -396,6 +396,11 @@ w_Sudoku::w_Sudoku(Sudoku& t_s, QPlainTextEdit* t_textConsole, QWidget* parent) 
   // connect text_msg from w_Sudoku with console widget in Sudoku_view
   connect(this, SIGNAL(text_msg(QString)), textConsole, SLOT(appendPlainText(QString)));
 
+  // connect update_parent() from w_Sudoku with on_update_requested_by child
+  // in Sudoku_view
+  connect(this, SIGNAL(update_parent()),
+	  parent, SLOT(on_update_requested_by_child()));
+
   // connect update_parent() msg from cells with on_update_request_by_child() in
   // Sudoku_view
   for (int i = 0; i < s.total_size; ++i) {
@@ -527,6 +532,90 @@ void w_Sudoku::on_update_request_by_child(int from_child) {
   // QString::number(from_child)); normally called when changes induced by child require
   // widget update
   update_all_cells();
+
+  return;
+}
+
+void w_Sudoku::remove_naked_singles() {
+
+  int num_removed = sudoku_remove_naked_singles(s);
+  emit text_msg(QString::number(num_removed) + QString(" naked single(s) entfernt."));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+  
+  emit update_parent();
+
+  return;
+}
+
+void w_Sudoku::remove_hidden_singles() {
+
+  int num_removed = sudoku_remove_hidden_singles(s);
+  emit text_msg(QString::number(num_removed) + QString(" hidden single(s) entfernt."));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+  
+  emit update_parent();
+
+  return;
+}
+
+void w_Sudoku::remove_naked_twins() {
+
+  int num_removed = sudoku_remove_naked_twins(s);
+  emit text_msg(QString::number(num_removed) + QString(" naked twin(s) entfernt."));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+
+  emit update_parent();
+
+  return;
+}
+
+void w_Sudoku::remove_hidden_twins() {
+
+  int num_removed = sudoku_remove_hidden_twins(s);
+  emit text_msg(QString::number(num_removed) + QString(" hidden twin(s) entfernt."));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+
+  emit update_parent();
+
+  return;
+}
+
+void w_Sudoku::remove_naked_triples() {
+
+  int num_removed = sudoku_remove_naked_triples(s);
+  emit text_msg(QString::number(num_removed) + QString(" naked triple(s) entfernt."));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+
+  emit update_parent();
+
+  return;
+}
+
+void w_Sudoku::remove_hidden_triples() {
+
+  int num_removed = sudoku_remove_hidden_triples(s);
+  emit text_msg(QString::number(num_removed) + QString(" hidden triple(s) entfernt."));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+
+  emit update_parent();
+
+  return;
+}
+
+void w_Sudoku::remove_naked_quadruples() {
+
+  int num_removed = sudoku_remove_naked_quadruples(s);
+  emit text_msg(QString::number(num_removed) + QString(" naked quadruple(s) entfernt."));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+
+  emit update_parent();
 
   return;
 }

@@ -11,7 +11,7 @@ w_Sudoku_view::w_Sudoku_view(Sudoku& t_s, QWidget* parent) : QWidget(parent), s(
   setWindowTitle("Sudoku View");
 
   createTextConsoleWidget();  // needed before cells are created to connect signals
-  sudoku_widget = new w_Sudoku(s, textconsole_widget);
+  sudoku_widget = new w_Sudoku(s, textconsole_widget, this);
 
   dialog_button_widget = new QDialogButtonBox(QDialogButtonBox::Close);
 
@@ -132,30 +132,31 @@ void w_Sudoku_view::createSolverWidget() {
   update_number_solution_pattern_values();
 
   remove_naked_singles_button = new QPushButton("Entfernen");
-  connect(remove_naked_singles_button, SIGNAL(clicked()), this,
+  connect(remove_naked_singles_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_naked_singles()));
 
   remove_hidden_singles_button = new QPushButton("Entfernen");
-  connect(remove_hidden_singles_button, SIGNAL(clicked()), this,
+  connect(remove_hidden_singles_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_hidden_singles()));
 
   remove_naked_twins_button = new QPushButton("Entfernen");
-  connect(remove_naked_twins_button, SIGNAL(clicked()), this, SLOT(remove_naked_twins()));
+  connect(remove_naked_twins_button, SIGNAL(clicked()), sudoku_widget,
+          SLOT(remove_naked_twins()));
 
   remove_hidden_twins_button = new QPushButton("Entfernen");
-  connect(remove_hidden_twins_button, SIGNAL(clicked()), this,
+  connect(remove_hidden_twins_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_hidden_twins()));
 
   remove_naked_triples_button = new QPushButton("Entfernen");
-  connect(remove_naked_triples_button, SIGNAL(clicked()), this,
+  connect(remove_naked_triples_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_naked_triples()));
   
   remove_hidden_triples_button = new QPushButton("Entfernen");
-  connect(remove_hidden_triples_button, SIGNAL(clicked()), this,
+  connect(remove_hidden_triples_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_hidden_triples()));
 
   remove_naked_quadruples_button = new QPushButton("Entfernen");
-  connect(remove_naked_quadruples_button, SIGNAL(clicked()), this,
+  connect(remove_naked_quadruples_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_naked_quadruples()));
 
   QCheckBox* naked_singles_toggle = new QCheckBox(" Naked Singles  ", this);
@@ -295,78 +296,10 @@ void w_Sudoku_view::update_number_solution_pattern_values() {
   return;
 }
 
-void w_Sudoku_view::update_active_widgets() {
+void w_Sudoku_view::on_update_requested_by_child() {
 
-  // update solution type fields
-  sudoku_widget->update_sudoku_solution_type_vectors();
-
-  // update active widgets
-  sudoku_widget->update_all_cells();
   update_status_values();
   update_number_solution_pattern_values();
-
-  return;
-}
-
-void w_Sudoku_view::remove_naked_singles() {
-
-  int num_removed = sudoku_remove_naked_singles(s);
-  emit text_msg(QString::number(num_removed) + QString(" naked single(s) entfernt."));
-  update_active_widgets();
-
-  return;
-}
-
-void w_Sudoku_view::remove_hidden_singles() {
-
-  int num_removed = sudoku_remove_hidden_singles(s);
-  emit text_msg(QString::number(num_removed) + QString(" hidden single(s) entfernt."));
-  update_active_widgets();
-
-  return;
-}
-
-void w_Sudoku_view::remove_naked_twins() {
-
-  int num_removed = sudoku_remove_naked_twins(s);
-  emit text_msg(QString::number(num_removed) + QString(" naked twin(s) entfernt."));
-  update_active_widgets();
-
-  return;
-}
-
-void w_Sudoku_view::remove_hidden_twins() {
-
-  int num_removed = sudoku_remove_hidden_twins(s);
-  emit text_msg(QString::number(num_removed) + QString(" hidden twin(s) entfernt."));
-  update_active_widgets();
-
-  return;
-}
-
-void w_Sudoku_view::remove_naked_triples() {
-
-  int num_removed = sudoku_remove_naked_triples(s);
-  emit text_msg(QString::number(num_removed) + QString(" naked triple(s) entfernt."));
-  update_active_widgets();
-
-  return;
-}
-
-void w_Sudoku_view::remove_hidden_triples() {
-
-  int num_removed = sudoku_remove_hidden_triples(s);
-  emit text_msg(QString::number(num_removed) + QString(" hidden triple(s) entfernt."));
-  update_active_widgets();
-
-  return;
-}
-
-void w_Sudoku_view::remove_naked_quadruples() {
-
-  int num_removed = sudoku_remove_naked_quadruples(s);
-  emit text_msg(QString::number(num_removed) + QString(" naked quadruple(s) entfernt."));
-  update_active_widgets();
 
   return;
 }

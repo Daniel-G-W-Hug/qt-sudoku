@@ -95,7 +95,7 @@ public:
   explicit w_Sudoku(Sudoku& t_s, QPlainTextEdit* t_textConsole, QWidget* parent = 0);
 
   // currently public, should be transferred to property types with public
-  // get-/set-functions
+  // get-/set-func@tions
   w_Sudoku_properties prop;
 
   void update_all_cells();
@@ -103,6 +103,7 @@ public:
 
 signals:
   void text_msg(QString msg);  // send messages intended for text console
+  void update_parent();
 
 private slots:
 
@@ -120,6 +121,14 @@ private slots:
   void on_toggle_show_naked_quadruples(int);
 
   void on_update_request_by_child(int);
+
+  void remove_naked_singles();
+  void remove_hidden_singles();
+  void remove_naked_twins();
+  void remove_hidden_twins();
+  void remove_naked_triples();
+  void remove_hidden_triples();
+  void remove_naked_quadruples();
 
 private:
   void mark_cells_as_solution_regions();

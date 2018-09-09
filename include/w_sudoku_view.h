@@ -33,19 +33,11 @@ private:
   void update_status_values();
   void update_number_solution_pattern_values();
 
-  void update_active_widgets();
+private slots:
+  void on_update_requested_by_child();
 
 signals:
   void text_msg(QString msg);  // send messages intended for text console
-
-private slots:
-  void remove_naked_singles();
-  void remove_hidden_singles();
-  void remove_naked_twins();
-  void remove_hidden_twins();
-  void remove_naked_triples();
-  void remove_hidden_triples();
-  void remove_naked_quadruples();
 
 private:
   Sudoku& s;
