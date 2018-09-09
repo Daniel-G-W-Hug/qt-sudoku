@@ -131,94 +131,97 @@ void w_Sudoku_view::createSolverWidget() {
   num_naked_quadruples = new QLabel;
   update_number_solution_pattern_values();
 
-  remove_naked_singles_button = new QPushButton("Go!");
+  remove_naked_singles_button = new QPushButton("Entfernen");
   connect(remove_naked_singles_button, SIGNAL(clicked()), this,
           SLOT(remove_naked_singles()));
 
-  remove_hidden_singles_button = new QPushButton("Go!");
+  remove_hidden_singles_button = new QPushButton("Entfernen");
   connect(remove_hidden_singles_button, SIGNAL(clicked()), this,
           SLOT(remove_hidden_singles()));
 
-  remove_naked_twins_button = new QPushButton("Go!");
+  remove_naked_twins_button = new QPushButton("Entfernen");
   connect(remove_naked_twins_button, SIGNAL(clicked()), this, SLOT(remove_naked_twins()));
 
-  remove_hidden_twins_button = new QPushButton("Go!");
+  remove_hidden_twins_button = new QPushButton("Entfernen");
   connect(remove_hidden_twins_button, SIGNAL(clicked()), this,
           SLOT(remove_hidden_twins()));
 
-  remove_naked_triples_button = new QPushButton("Go!");
+  remove_naked_triples_button = new QPushButton("Entfernen");
   connect(remove_naked_triples_button, SIGNAL(clicked()), this,
           SLOT(remove_naked_triples()));
   
-  remove_hidden_triples_button = new QPushButton("Go!");
+  remove_hidden_triples_button = new QPushButton("Entfernen");
   connect(remove_hidden_triples_button, SIGNAL(clicked()), this,
           SLOT(remove_hidden_triples()));
 
-  remove_naked_quadruples_button = new QPushButton("Go!");
+  remove_naked_quadruples_button = new QPushButton("Entfernen");
   connect(remove_naked_quadruples_button, SIGNAL(clicked()), this,
           SLOT(remove_naked_quadruples()));
 
-  QFormLayout* formLayout = new QFormLayout;
-  formLayout->addRow("Naked Singles: ", num_naked_singles);
-  formLayout->addRow("Hidden Singles: ", num_hidden_singles);
-  formLayout->addRow("Naked Twins: ", num_naked_twins);
-  formLayout->addRow("Hidden Twins: ", num_hidden_twins);
-  formLayout->addRow("Naked Triples: ", num_naked_triples);
-  formLayout->addRow("Hidden Triples: ", num_hidden_triples);
-  formLayout->addRow("Naked Quadruples: ", num_naked_quadruples);
-  formLayout->addRow("Remove Naked Singles: ", remove_naked_singles_button);
-  formLayout->addRow("Remove Hidden Singles: ", remove_hidden_singles_button);
-  formLayout->addRow("Remove Naked Twins: ", remove_naked_twins_button);
-  formLayout->addRow("Remove Hidden Twins: ", remove_hidden_twins_button);
-  formLayout->addRow("Remove Naked Triples: ", remove_naked_triples_button);
-  formLayout->addRow("Remove Hidden Triples: ", remove_hidden_triples_button);
-  formLayout->addRow("Remove Naked Quadruples: ", remove_naked_quadruples_button);
-
-  QCheckBox* naked_singles_toggle = new QCheckBox("Markiere Naked Singles", this);
+  QCheckBox* naked_singles_toggle = new QCheckBox(" Naked Singles  ", this);
   naked_singles_toggle->setChecked(sudoku_widget->prop.show_naked_singles);
   connect(naked_singles_toggle, SIGNAL(stateChanged(int)), sudoku_widget,
           SLOT(on_toggle_show_naked_singles(int)));
 
-  QCheckBox* hidden_singles_toggle = new QCheckBox("Markiere Hidden Singles", this);
+  QCheckBox* hidden_singles_toggle = new QCheckBox(" Hidden Singles  ", this);
   hidden_singles_toggle->setChecked(sudoku_widget->prop.show_hidden_singles);
   connect(hidden_singles_toggle, SIGNAL(stateChanged(int)), sudoku_widget,
           SLOT(on_toggle_show_hidden_singles(int)));
 
-  QCheckBox* naked_twins_toggle = new QCheckBox("Markiere Naked Twins", this);
+  QCheckBox* naked_twins_toggle = new QCheckBox(" Naked Twins  ", this);
   naked_twins_toggle->setChecked(sudoku_widget->prop.show_naked_twins);
   connect(naked_twins_toggle, SIGNAL(stateChanged(int)), sudoku_widget,
           SLOT(on_toggle_show_naked_twins(int)));
 
-  QCheckBox* hidden_twins_toggle = new QCheckBox("Markiere Hidden Twins", this);
+  QCheckBox* hidden_twins_toggle = new QCheckBox(" Hidden Twins  ", this);
   hidden_twins_toggle->setChecked(sudoku_widget->prop.show_hidden_twins);
   connect(hidden_twins_toggle, SIGNAL(stateChanged(int)), sudoku_widget,
           SLOT(on_toggle_show_hidden_twins(int)));
 
-  QCheckBox* naked_triples_toggle = new QCheckBox("Markiere Naked Triples", this);
+  QCheckBox* naked_triples_toggle = new QCheckBox(" Naked Triples  ", this);
   naked_triples_toggle->setChecked(sudoku_widget->prop.show_naked_triples);
   connect(naked_triples_toggle, SIGNAL(stateChanged(int)), sudoku_widget,
           SLOT(on_toggle_show_naked_triples(int)));
 
-  QCheckBox* hidden_triples_toggle = new QCheckBox("Markiere Hidden Triples", this);
+  QCheckBox* hidden_triples_toggle = new QCheckBox(" Hidden Triples  ", this);
   hidden_triples_toggle->setChecked(sudoku_widget->prop.show_hidden_triples);
   connect(hidden_triples_toggle, SIGNAL(stateChanged(int)), sudoku_widget,
           SLOT(on_toggle_show_hidden_triples(int)));
 
-  QCheckBox* naked_quadruples_toggle = new QCheckBox("Markiere Naked Quadruples", this);
+  QCheckBox* naked_quadruples_toggle = new QCheckBox(" Naked Quads  ", this);
   naked_quadruples_toggle->setChecked(sudoku_widget->prop.show_naked_quadruples);
   connect(naked_quadruples_toggle, SIGNAL(stateChanged(int)), sudoku_widget,
           SLOT(on_toggle_show_naked_quadruples(int)));
 
-  QVBoxLayout* layout = new QVBoxLayout;
-  layout->addLayout(formLayout);
-  layout->addWidget(naked_singles_toggle);
-  layout->addWidget(hidden_singles_toggle);
-  layout->addWidget(naked_twins_toggle);
-  layout->addWidget(hidden_twins_toggle);
-  layout->addWidget(naked_triples_toggle);
-  layout->addWidget(hidden_triples_toggle);
-  layout->addWidget(naked_quadruples_toggle);
-  solver_widget->setLayout(layout);
+  QGridLayout* gridlayout = new QGridLayout;
+
+  gridlayout->addWidget(naked_singles_toggle,0,0);
+  gridlayout->addWidget(num_naked_singles,0,1);
+  gridlayout->addWidget(remove_naked_singles_button,0,2);
+  gridlayout->addWidget(hidden_singles_toggle,1,0);
+  gridlayout->addWidget(num_hidden_singles,1,1);
+  gridlayout->addWidget(remove_hidden_singles_button,1,2);
+
+  gridlayout->addWidget(naked_twins_toggle,2,0);
+  gridlayout->addWidget(num_naked_twins,2,1);
+  gridlayout->addWidget(remove_naked_twins_button,2,2);
+  gridlayout->addWidget(hidden_twins_toggle,3,0);
+  gridlayout->addWidget(num_hidden_twins,3,1);
+  gridlayout->addWidget(remove_hidden_twins_button,3,2);
+
+  gridlayout->addWidget(naked_triples_toggle,4,0);
+  gridlayout->addWidget(num_naked_triples,4,1);
+  gridlayout->addWidget(remove_naked_triples_button,4,2);
+  gridlayout->addWidget(hidden_triples_toggle,5,0);
+  gridlayout->addWidget(num_hidden_triples,5,1);
+  gridlayout->addWidget(remove_hidden_triples_button,5,2);
+
+  gridlayout->addWidget(naked_quadruples_toggle,6,0);
+  gridlayout->addWidget(num_naked_quadruples,6,1);
+  gridlayout->addWidget(remove_naked_quadruples_button,6,2);
+
+  solver_widget->setLayout(gridlayout);
+  
 
   return;
 }
