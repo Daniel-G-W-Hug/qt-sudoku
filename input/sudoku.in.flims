@@ -1,0 +1,18 @@
+# 
+# Eingabedatei fuer Sudoku (Kommentarzeilen mit # werden ignoriert)
+#
+### Regionsgroesse, Blocks pro Reihe und Blocks pro Spalte
+#                 -> Gesamtgroesse = Regionsgroesse * Regionsgroesse
+#                 -> Blocks pro Reihe * Blocks pro Spalte = Regionsgroesse
+9 3 3
+### (Sudoku-Zeilen, nicht belegte Zellen sind mit 0 belegt)
+7 0 0 1 0 9 0 0 4
+0 0 0 0 4 0 0 0 0
+0 9 0 7 0 6 0 3 0
+0 0 6 0 0 0 5 0 0
+0 0 8 0 3 0 9 0 0
+0 0 2 0 0 0 8 0 0
+0 4 0 2 0 8 0 9 0
+0 0 0 0 7 0 0 0 0
+8 0 0 6 0 1 0 0 2
+

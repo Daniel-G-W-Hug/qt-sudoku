@@ -16,9 +16,16 @@
 cmake_minimum_required(VERSION 3.5.2)
 
 #
+### to use gcc-8 and g++-8 instead of clang  (must come before project line)
+#
+# set following lines to comment to use clang
+#set(CMAKE_C_COMPILER "gcc-8")
+#set(CMAKE_CXX_COMPILER "g++-8")
+
+#
 # project name (=identical to executable name)
 #
-project(qt-basic)
+project(qt-widget_array)
 
 #
 # configure qt
@@ -39,7 +46,7 @@ get_target_property(QtCore_location Qt5::Core LOCATION)
 # Compiler flags
 #
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3 -Wall -Wpedantic")
 
 #
 # add include directories for header files)
