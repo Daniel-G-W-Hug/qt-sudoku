@@ -88,7 +88,7 @@ public:
   Sudoku(const Sudoku& other_Sudoku);
 
   // assignment
-  Sudoku& operator=(const Sudoku&);
+  Sudoku& operator=(const Sudoku& other_Sudoku);
 
   // element access
   Sudoku_cell& operator()(int cnt);

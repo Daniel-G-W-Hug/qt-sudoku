@@ -151,7 +151,7 @@ Sudoku::Sudoku(const Sudoku& other_Sudoku) :
 // assignment
 //
 Sudoku& Sudoku::operator=(const Sudoku& other_Sudoku) {
-  // cout << "assignment operator called\n";
+  //cout << "assignment operator called\n";
 
   if (this != &other_Sudoku) {  // no self-assignment
 
@@ -163,27 +163,13 @@ Sudoku& Sudoku::operator=(const Sudoku& other_Sudoku) {
                    "Invalid assignment. Layout of source and destination must "
                    "be identical.");
 
-    // initialize Sudoku from other_Sudoku by creating a new cell array
+    // initialize Sudoku from other_Sudoku
     for (int cnt = 0; cnt < other_Sudoku.total_size; ++cnt) {
-      // create new cell (empty by default, i.e. sc.val = 0)
-      // it already knows with regions it belongs to
-      Sudoku_cell sc(
-          cnt, other_Sudoku.cnt_to_row(cnt).first, other_Sudoku.cnt_to_row(cnt).second,
-          other_Sudoku.cnt_to_col(cnt).first, other_Sudoku.cnt_to_col(cnt).second,
-          other_Sudoku.cnt_to_block(cnt).first, other_Sudoku.cnt_to_block(cnt).second);
-
       // copy value and candidate set from other_Sudoku
-      sc.val  = other_Sudoku.m_cell[cnt].val;
-      sc.cand = other_Sudoku.m_cell[cnt].cand;
-
-      // push cell into vector of cells
-      m_cell.push_back(sc);
+      m_cell[cnt].val  = other_Sudoku.m_cell[cnt].val;
+      m_cell[cnt].cand = other_Sudoku.m_cell[cnt].cand;
     }
 
-    // initialize links for region access
-    row.init_access();
-    col.init_access();
-    block.init_access();
   }
   
   return *this;

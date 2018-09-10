@@ -159,6 +159,10 @@ void w_Sudoku_view::createSolverWidget() {
   connect(remove_naked_quadruples_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_naked_quadruples()));
 
+  undo_button = new QPushButton("Rückgängig");
+  connect(undo_button, SIGNAL(clicked()), sudoku_widget,
+          SLOT(undo_requested()));
+
   QCheckBox* naked_singles_toggle = new QCheckBox(" Naked Singles  ", this);
   naked_singles_toggle->setChecked(sudoku_widget->prop.show_naked_singles);
   connect(naked_singles_toggle, SIGNAL(stateChanged(int)), sudoku_widget,
@@ -220,6 +224,8 @@ void w_Sudoku_view::createSolverWidget() {
   gridlayout->addWidget(naked_quadruples_toggle,6,0);
   gridlayout->addWidget(num_naked_quadruples,6,1);
   gridlayout->addWidget(remove_naked_quadruples_button,6,2);
+
+  gridlayout->addWidget(undo_button,7,2);
 
   solver_widget->setLayout(gridlayout);
   

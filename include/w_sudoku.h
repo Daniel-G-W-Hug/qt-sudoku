@@ -130,12 +130,18 @@ private slots:
   void remove_hidden_triples();
   void remove_naked_quadruples();
 
+  void undo_requested();
+
 private:
   void mark_cells_as_solution_regions();
+  void store_sudoku_for_undo(Sudoku sh);
+  Sudoku retrieve_from_undo();
 
 private:
   Sudoku& s;  // Sudoku memory managed by caller
   QPlainTextEdit* textConsole;
+
+  vector<Sudoku> undo;
 
   vector<w_Sudoku_cell*> cell_widgets;
   vector<QHBoxLayout*> row_widgets;

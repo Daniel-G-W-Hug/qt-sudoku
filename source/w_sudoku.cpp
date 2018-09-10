@@ -2,6 +2,8 @@
 
 #include "w_sudoku.h"
 
+//#include "sudoku_print.h"  // debugging only
+
 #include <QtWidgets>
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -538,6 +540,7 @@ void w_Sudoku::on_update_request_by_child(int from_child) {
 
 void w_Sudoku::remove_naked_singles() {
 
+  store_sudoku_for_undo(s);
   int num_removed = sudoku_remove_naked_singles(s);
   emit text_msg(QString::number(num_removed) + QString(" naked single(s) entfernt."));
   update_sudoku_solution_type_vectors();
@@ -550,6 +553,7 @@ void w_Sudoku::remove_naked_singles() {
 
 void w_Sudoku::remove_hidden_singles() {
 
+  store_sudoku_for_undo(s);
   int num_removed = sudoku_remove_hidden_singles(s);
   emit text_msg(QString::number(num_removed) + QString(" hidden single(s) entfernt."));
   update_sudoku_solution_type_vectors();
@@ -562,6 +566,7 @@ void w_Sudoku::remove_hidden_singles() {
 
 void w_Sudoku::remove_naked_twins() {
 
+  store_sudoku_for_undo(s);
   int num_removed = sudoku_remove_naked_twins(s);
   emit text_msg(QString::number(num_removed) + QString(" naked twin(s) entfernt."));
   update_sudoku_solution_type_vectors();
@@ -574,6 +579,7 @@ void w_Sudoku::remove_naked_twins() {
 
 void w_Sudoku::remove_hidden_twins() {
 
+  store_sudoku_for_undo(s);
   int num_removed = sudoku_remove_hidden_twins(s);
   emit text_msg(QString::number(num_removed) + QString(" hidden twin(s) entfernt."));
   update_sudoku_solution_type_vectors();
@@ -586,6 +592,7 @@ void w_Sudoku::remove_hidden_twins() {
 
 void w_Sudoku::remove_naked_triples() {
 
+  store_sudoku_for_undo(s);
   int num_removed = sudoku_remove_naked_triples(s);
   emit text_msg(QString::number(num_removed) + QString(" naked triple(s) entfernt."));
   update_sudoku_solution_type_vectors();
@@ -598,6 +605,7 @@ void w_Sudoku::remove_naked_triples() {
 
 void w_Sudoku::remove_hidden_triples() {
 
+  store_sudoku_for_undo(s);
   int num_removed = sudoku_remove_hidden_triples(s);
   emit text_msg(QString::number(num_removed) + QString(" hidden triple(s) entfernt."));
   update_sudoku_solution_type_vectors();
@@ -610,6 +618,7 @@ void w_Sudoku::remove_hidden_triples() {
 
 void w_Sudoku::remove_naked_quadruples() {
 
+  store_sudoku_for_undo(s);
   int num_removed = sudoku_remove_naked_quadruples(s);
   emit text_msg(QString::number(num_removed) + QString(" naked quadruple(s) entfernt."));
   update_sudoku_solution_type_vectors();
@@ -617,6 +626,21 @@ void w_Sudoku::remove_naked_quadruples() {
 
   emit update_parent();
 
+  return;
+}
+
+void w_Sudoku::undo_requested() {
+
+  if (undo.size() > 0) {
+    s = retrieve_from_undo();
+    update_sudoku_solution_type_vectors();
+    update_all_cells();
+  } else {
+    emit text_msg(QString("No further undo information available."));
+  }
+  
+  emit update_parent();
+  
   return;
 }
 
@@ -688,4 +712,25 @@ void w_Sudoku::mark_cells_as_solution_regions() {
   }
 
   return;
+}
+
+void w_Sudoku::store_sudoku_for_undo(Sudoku sh) {
+  
+  undo.push_back(sh);
+
+  return;
+}
+
+Sudoku w_Sudoku::retrieve_from_undo() {
+
+  Sudoku sh(s.region_size, s.blocks_per_row, s.blocks_per_col);
+  
+  if (undo.size() > 0) {
+    sh = undo.back();
+    undo.pop_back();
+    emit text_msg(QString("Undo performed. Number of undo steps remaining: ") +
+                  QString::number(undo.size()));
+  }
+
+  return sh;
 }
