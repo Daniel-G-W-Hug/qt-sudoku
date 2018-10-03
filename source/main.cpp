@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
     input_stream = &input_file;
   }
   //****************************************************************************
-  // read and initialize sudoku from stdin
+  // read and initialize sudoku from input_stream
   //****************************************************************************
   // read sudoku size and create sudoku object
   int region_size = read_int(input_stream);
@@ -45,11 +45,9 @@ int main(int argc, char* argv[]) {
   int bpc         = read_int(input_stream);
   Sudoku s(region_size, bpr, bpc);
 
-  // initialize sudoku with input values
-  for (int cnt = 0; cnt < s.total_size; ++cnt) {
-    s(cnt).val = read_int(input_stream);
-    if (s(cnt).val != 0) { sudoku_update_candidates_affected_by_cell(s, cnt); }
-  }
+  // initialize sudoku with input values and initialize candidate values
+  for (int cnt = 0; cnt < s.total_size; ++cnt) { s(cnt).val = read_int(input_stream); }
+  sudoku_update_candidates_all_cells(s);
 
   w_Sudoku_view Sudoku_view(s);
   Sudoku_view.move(700, 100);

@@ -109,6 +109,7 @@ bool sudoku_is_valid(const Sudoku& s) {
   // 0 (=empty indicator, is valid too), valid entries: 1..region_size
   for (int cnt = 0; cnt < s.total_size; ++cnt) {
     if (s(cnt).val < 0 || s(cnt).val > s.region_size) { return false; }
+    if (s(cnt).val == 0 && s(cnt).cand.size() == 0) {return false;} 
   }
 
   // check for valid and unique entries in regions

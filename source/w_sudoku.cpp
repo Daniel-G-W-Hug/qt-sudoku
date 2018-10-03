@@ -24,6 +24,7 @@ w_Sudoku_cell::w_Sudoku_cell(Sudoku& t_s, int t_cnt, w_Sudoku& t_w_Sudoku,
   pal.setColor(QPalette::Background, Qt::white);
   setAutoFillBackground(true);
   setPalette(pal);
+  setFocusPolicy(Qt::ClickFocus);  // to switch off set to Qt::NoFocus
 
   return;
 }
@@ -329,9 +330,45 @@ void w_Sudoku_cell::leaveEvent(QEvent* e) {
   return;
 }
 
-// void w_Sudoku_cell::mark_cell_as_selected(const int cell_idx) {
+void w_Sudoku_cell::keyPressEvent(QKeyEvent* e) {
 
-// }
+  switch (e->key()) {
+    case Qt::Key_0:
+      emit value_changed_by_user(cnt,0);
+      break;
+    case Qt::Key_1:
+      emit value_changed_by_user(cnt,1);
+      break;
+    case Qt::Key_2:
+      emit value_changed_by_user(cnt,2);
+      break;
+    case Qt::Key_3:
+      emit value_changed_by_user(cnt,3);
+      break;
+    case Qt::Key_4:
+      emit value_changed_by_user(cnt,4);
+      break;
+    case Qt::Key_5:
+      emit value_changed_by_user(cnt,5);
+      break;
+    case Qt::Key_6:
+      emit value_changed_by_user(cnt,6);
+      break;
+    case Qt::Key_7:
+      emit value_changed_by_user(cnt,7);
+      break;
+    case Qt::Key_8:
+      emit value_changed_by_user(cnt,8);
+      break;
+    case Qt::Key_9:
+      emit value_changed_by_user(cnt,9);
+      break;
+    default:
+      QWidget::keyPressEvent(e); // pass-on to base class
+  }
+
+  return;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 // w_Sudoku
@@ -404,10 +441,17 @@ w_Sudoku::w_Sudoku(Sudoku& t_s, QPlainTextEdit* t_textConsole, QWidget* parent) 
 	  parent, SLOT(on_update_requested_by_child()));
 
   // connect update_parent() msg from cells with on_update_request_by_child() in
-  // Sudoku_view
+  // Sudoku_w
   for (int i = 0; i < s.total_size; ++i) {
     connect(cell_widgets[i], SIGNAL(update_parent(int)), this,
             SLOT(on_update_request_by_child(int)));
+  }
+
+  // connect value_changed_by_user() from cells with on_value_changed_by_user() in
+  // Sudoku_w
+  for (int i = 0; i < s.total_size; ++i) {
+    connect(cell_widgets[i], SIGNAL(value_changed_by_user(int,int)), this,
+            SLOT(on_value_changed_by_user(int,int)));
   }
 
   // intialize solution types (do once for w_sudoku, use for all cells)
@@ -536,6 +580,21 @@ void w_Sudoku::on_update_request_by_child(int from_child) {
   update_all_cells();
 
   return;
+}
+
+void w_Sudoku::on_value_changed_by_user(int from_child, int value) {
+
+  store_sudoku_for_undo(s);
+  s(from_child).val = value;
+  sudoku_update_candidates_affected_by_cell(s, from_child);
+
+  emit text_msg(QString("User entered value ") + QString::number(value) +
+                QString(" in cell ") + QString::number(from_child));
+
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+
+  emit update_parent();
 }
 
 void w_Sudoku::remove_naked_singles() {

@@ -150,7 +150,7 @@ void w_Sudoku_view::createSolverWidget() {
   remove_naked_triples_button = new QPushButton("Entfernen");
   connect(remove_naked_triples_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_naked_triples()));
-  
+
   remove_hidden_triples_button = new QPushButton("Entfernen");
   connect(remove_hidden_triples_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_hidden_triples()));
@@ -160,8 +160,7 @@ void w_Sudoku_view::createSolverWidget() {
           SLOT(remove_naked_quadruples()));
 
   undo_button = new QPushButton("Rückgängig");
-  connect(undo_button, SIGNAL(clicked()), sudoku_widget,
-          SLOT(undo_requested()));
+  connect(undo_button, SIGNAL(clicked()), sudoku_widget, SLOT(undo_requested()));
 
   QCheckBox* naked_singles_toggle = new QCheckBox(" Naked Singles  ", this);
   naked_singles_toggle->setChecked(sudoku_widget->prop.show_naked_singles);
@@ -200,35 +199,34 @@ void w_Sudoku_view::createSolverWidget() {
 
   QGridLayout* gridlayout = new QGridLayout;
 
-  gridlayout->addWidget(naked_singles_toggle,0,0);
-  gridlayout->addWidget(num_naked_singles,0,1);
-  gridlayout->addWidget(remove_naked_singles_button,0,2);
-  gridlayout->addWidget(hidden_singles_toggle,1,0);
-  gridlayout->addWidget(num_hidden_singles,1,1);
-  gridlayout->addWidget(remove_hidden_singles_button,1,2);
+  gridlayout->addWidget(naked_singles_toggle, 0, 0);
+  gridlayout->addWidget(num_naked_singles, 0, 1);
+  gridlayout->addWidget(remove_naked_singles_button, 0, 2);
+  gridlayout->addWidget(hidden_singles_toggle, 1, 0);
+  gridlayout->addWidget(num_hidden_singles, 1, 1);
+  gridlayout->addWidget(remove_hidden_singles_button, 1, 2);
 
-  gridlayout->addWidget(naked_twins_toggle,2,0);
-  gridlayout->addWidget(num_naked_twins,2,1);
-  gridlayout->addWidget(remove_naked_twins_button,2,2);
-  gridlayout->addWidget(hidden_twins_toggle,3,0);
-  gridlayout->addWidget(num_hidden_twins,3,1);
-  gridlayout->addWidget(remove_hidden_twins_button,3,2);
+  gridlayout->addWidget(naked_twins_toggle, 2, 0);
+  gridlayout->addWidget(num_naked_twins, 2, 1);
+  gridlayout->addWidget(remove_naked_twins_button, 2, 2);
+  gridlayout->addWidget(hidden_twins_toggle, 3, 0);
+  gridlayout->addWidget(num_hidden_twins, 3, 1);
+  gridlayout->addWidget(remove_hidden_twins_button, 3, 2);
 
-  gridlayout->addWidget(naked_triples_toggle,4,0);
-  gridlayout->addWidget(num_naked_triples,4,1);
-  gridlayout->addWidget(remove_naked_triples_button,4,2);
-  gridlayout->addWidget(hidden_triples_toggle,5,0);
-  gridlayout->addWidget(num_hidden_triples,5,1);
-  gridlayout->addWidget(remove_hidden_triples_button,5,2);
+  gridlayout->addWidget(naked_triples_toggle, 4, 0);
+  gridlayout->addWidget(num_naked_triples, 4, 1);
+  gridlayout->addWidget(remove_naked_triples_button, 4, 2);
+  gridlayout->addWidget(hidden_triples_toggle, 5, 0);
+  gridlayout->addWidget(num_hidden_triples, 5, 1);
+  gridlayout->addWidget(remove_hidden_triples_button, 5, 2);
 
-  gridlayout->addWidget(naked_quadruples_toggle,6,0);
-  gridlayout->addWidget(num_naked_quadruples,6,1);
-  gridlayout->addWidget(remove_naked_quadruples_button,6,2);
+  gridlayout->addWidget(naked_quadruples_toggle, 6, 0);
+  gridlayout->addWidget(num_naked_quadruples, 6, 1);
+  gridlayout->addWidget(remove_naked_quadruples_button, 6, 2);
 
-  gridlayout->addWidget(undo_button,7,2);
+  gridlayout->addWidget(undo_button, 7, 2);
 
   solver_widget->setLayout(gridlayout);
-  
 
   return;
 }

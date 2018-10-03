@@ -72,12 +72,15 @@ protected:
   void enterEvent(QEvent* e) override;
   void leaveEvent(QEvent* e) override;
 
+  void keyPressEvent(QKeyEvent* e) override;
+
   // private slots:
 
 signals:
   void text_msg(QString msg);          // send messages intended for text console
   void update_parent(int from_child);  // signal parent widget that it needs to update
                                        // because of changes in this child widget
+  void value_changed_by_user(int from_child, int value); // signal user input 
 
 private:
   const int cell_size{50};  // side length of one cell in pixels
@@ -121,6 +124,8 @@ private slots:
   void on_toggle_show_naked_quadruples(int);
 
   void on_update_request_by_child(int);
+
+  void on_value_changed_by_user(int from_child, int value);
 
   void remove_naked_singles();
   void remove_hidden_singles();
