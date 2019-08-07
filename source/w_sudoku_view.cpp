@@ -82,7 +82,7 @@ void w_Sudoku_view::createTextConsoleWidget() {
   textconsole_widget->setReadOnly(true);
   textconsole_widget->moveCursor(QTextCursor::End);  // now insert can be used
   textconsole_widget->verticalScrollBar()->setValue(
-      textconsole_widget->verticalScrollBar()->maximum());
+  textconsole_widget->verticalScrollBar()->maximum());
 
   // textconsole_widget->setPlainText("Welcome to ...");
   // textconsole_widget->moveCursor(QTextCursor::End);
@@ -159,6 +159,10 @@ void w_Sudoku_view::createSolverWidget() {
   connect(remove_naked_quadruples_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_naked_quadruples()));
 
+  remove_automatic_button = new QPushButton("Entferne alle");
+  connect(remove_automatic_button, SIGNAL(clicked()), sudoku_widget,
+          SLOT(remove_all()));
+
   undo_button = new QPushButton("Rückgängig");
   connect(undo_button, SIGNAL(clicked()), sudoku_widget, SLOT(undo_requested()));
 
@@ -224,7 +228,8 @@ void w_Sudoku_view::createSolverWidget() {
   gridlayout->addWidget(num_naked_quadruples, 6, 1);
   gridlayout->addWidget(remove_naked_quadruples_button, 6, 2);
 
-  gridlayout->addWidget(undo_button, 7, 2);
+  gridlayout->addWidget(remove_automatic_button, 7, 2);
+  gridlayout->addWidget(undo_button, 8, 2);
 
   solver_widget->setLayout(gridlayout);
 

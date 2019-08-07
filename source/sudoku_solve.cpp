@@ -2,6 +2,7 @@
 #include "dyn_assert.h"
 
 #include <algorithm>
+#include <numeric>
 #include <tuple>
 //#include "sudoku_print.h" // for debugging only
 #include "sudoku_solve.h"
@@ -1142,4 +1143,73 @@ int sudoku_remove_naked_quadruples(Sudoku& s) {
   }
 
   return num_naked_quadruples_removed;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// remove all types of singles, twins, etc. automatically
+//////////////////////////////////////////////////////////////////////////////////////////
+int sudoku_remove_all(Sudoku& s) {
+
+	int num_entries_before = sudoku_num_entries(s);
+
+    // entries for Sudoku_solution_t
+	std::vector<int> sol_count(Sudoku_solution_t::enum_count,0);
+	std::vector<int> remove_count(Sudoku_solution_t::enum_count,0);
+
+	sol_count[Sudoku_solution_t::naked_single] = sudoku_num_naked_singles(s);
+	sol_count[Sudoku_solution_t::hidden_single] = sudoku_num_hidden_singles(s);
+	sol_count[Sudoku_solution_t::naked_twin] = sudoku_num_naked_twins(s);
+	sol_count[Sudoku_solution_t::hidden_twin] = sudoku_num_hidden_twins(s);
+	sol_count[Sudoku_solution_t::naked_triple] = sudoku_num_naked_triples(s);
+	sol_count[Sudoku_solution_t::hidden_triple] = sudoku_num_hidden_triples(s);
+	sol_count[Sudoku_solution_t::naked_quadruple] = sudoku_num_naked_quadruples(s);
+	int num_sol = std::accumulate(sol_count.cbegin(),sol_count.cend(),0);
+
+	while (num_sol > 0 &&
+		   sudoku_is_valid(s) // stop iteration in recursive calls for invalid sudokus
+		  ) {
+
+		if (sol_count[Sudoku_solution_t::naked_single] > 0) {
+			remove_count[Sudoku_solution_t::naked_single]
+			+= sudoku_remove_naked_singles(s);
+		}
+		if (sol_count[Sudoku_solution_t::hidden_single] > 0) {
+			remove_count[Sudoku_solution_t::hidden_single]
+			+= sudoku_remove_hidden_singles(s);
+		}
+
+		if (sol_count[Sudoku_solution_t::naked_twin] > 0) {
+			remove_count[Sudoku_solution_t::naked_twin]
+			+= sudoku_remove_naked_twins(s);
+		}
+		if (sol_count[Sudoku_solution_t::hidden_twin] > 0) {
+			remove_count[Sudoku_solution_t::hidden_twin]
+			+= sudoku_remove_hidden_twins(s);
+		}
+
+		if (sol_count[Sudoku_solution_t::naked_triple] > 0) {
+			remove_count[Sudoku_solution_t::naked_triple]
+			+= sudoku_remove_naked_triples(s);
+		}
+		if (sol_count[Sudoku_solution_t::hidden_triple] > 0) {
+			remove_count[Sudoku_solution_t::hidden_triple]
+			+= sudoku_remove_hidden_triples(s);
+		}
+
+		if (sol_count[Sudoku_solution_t::naked_quadruple] > 0) {
+			remove_count[Sudoku_solution_t::naked_quadruple]
+			+= sudoku_remove_naked_quadruples(s);
+		}
+
+		sol_count[Sudoku_solution_t::naked_single] = sudoku_num_naked_singles(s);
+		sol_count[Sudoku_solution_t::hidden_single] = sudoku_num_hidden_singles(s);
+		sol_count[Sudoku_solution_t::naked_twin] = sudoku_num_naked_twins(s);
+		sol_count[Sudoku_solution_t::hidden_twin] = sudoku_num_hidden_twins(s);
+		sol_count[Sudoku_solution_t::naked_triple] = sudoku_num_naked_triples(s);
+		sol_count[Sudoku_solution_t::hidden_triple] = sudoku_num_hidden_triples(s);
+		sol_count[Sudoku_solution_t::naked_quadruple] = sudoku_num_naked_quadruples(s);
+		num_sol = std::accumulate(sol_count.cbegin(),sol_count.cend(),0);
+	}
+
+	return sudoku_num_entries(s) - num_entries_before;  // return number of removed entries
 }

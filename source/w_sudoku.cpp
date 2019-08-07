@@ -21,10 +21,15 @@ w_Sudoku_cell::w_Sudoku_cell(Sudoku& t_s, int t_cnt, w_Sudoku& t_w_Sudoku,
 
   // set white as background color
   QPalette pal = palette();
-  pal.setColor(QPalette::Background, Qt::white);
+  pal.setColor(QPalette::Window, Qt::white);
   setAutoFillBackground(true);
   setPalette(pal);
-  setFocusPolicy(Qt::ClickFocus);  // to switch off set to Qt::NoFocus
+  if (s(cnt).val == 0) {
+    setFocusPolicy(Qt::ClickFocus);  // empty cells can be selected for user input
+  } else {
+    setFocusPolicy(Qt::NoFocus);  // pre-filled cells cannot be selected for user input
+                                  // (not allowed to be modified by user)
+  }
 
   return;
 }
@@ -218,6 +223,13 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
         default: break;
       }
     }
+  }
+
+  if (this->hasFocus()) {
+      // current widget has focus (e.g. by clicking on widget with mouse
+      qp->setPen(QPen(Qt::red, 3, Qt::SolidLine));
+      qp->setBrush(Qt::NoBrush);
+      qp->drawRect(0, 0, cell_size, cell_size);
   }
 
   // show cells marked as part of selected region
@@ -457,7 +469,6 @@ w_Sudoku::w_Sudoku(Sudoku& t_s, QPlainTextEdit* t_textConsole, QWidget* parent) 
   // intialize solution types (do once for w_sudoku, use for all cells)
   update_sudoku_solution_type_vectors();
 
-  return;
 }
 
 void w_Sudoku::update_all_cells() {
@@ -465,7 +476,6 @@ void w_Sudoku::update_all_cells() {
   // update all sudoku cells
   for (int i = 0; i < s.total_size; ++i) { cell_widgets[i]->update(); }
 
-  return;
 }
 
 void w_Sudoku::update_sudoku_solution_type_vectors() {
@@ -480,7 +490,6 @@ void w_Sudoku::update_sudoku_solution_type_vectors() {
 
   mark_cells_as_solution_regions();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_candidate_lists(int) {
@@ -488,7 +497,6 @@ void w_Sudoku::on_toggle_show_candidate_lists(int) {
   prop.show_candidate_lists = !prop.show_candidate_lists;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_active_cell(int) {
@@ -496,7 +504,6 @@ void w_Sudoku::on_toggle_show_active_cell(int) {
   prop.show_active_cell = !prop.show_active_cell;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_affected_regions(int) {
@@ -505,7 +512,6 @@ void w_Sudoku::on_toggle_show_affected_regions(int) {
   // requires update of all cells
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_block_background(int) {
@@ -513,7 +519,6 @@ void w_Sudoku::on_toggle_show_block_background(int) {
   prop.show_block_background = !prop.show_block_background;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_naked_singles(int) {
@@ -521,7 +526,6 @@ void w_Sudoku::on_toggle_show_naked_singles(int) {
   prop.show_naked_singles = !prop.show_naked_singles;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_hidden_singles(int) {
@@ -529,7 +533,6 @@ void w_Sudoku::on_toggle_show_hidden_singles(int) {
   prop.show_hidden_singles = !prop.show_hidden_singles;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_naked_twins(int) {
@@ -537,7 +540,6 @@ void w_Sudoku::on_toggle_show_naked_twins(int) {
   prop.show_naked_twins = !prop.show_naked_twins;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_hidden_twins(int) {
@@ -545,7 +547,6 @@ void w_Sudoku::on_toggle_show_hidden_twins(int) {
   prop.show_hidden_twins = !prop.show_hidden_twins;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_naked_triples(int) {
@@ -553,7 +554,6 @@ void w_Sudoku::on_toggle_show_naked_triples(int) {
   prop.show_naked_triples = !prop.show_naked_triples;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_hidden_triples(int) {
@@ -561,7 +561,6 @@ void w_Sudoku::on_toggle_show_hidden_triples(int) {
   prop.show_hidden_triples = !prop.show_hidden_triples;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_toggle_show_naked_quadruples(int) {
@@ -569,7 +568,6 @@ void w_Sudoku::on_toggle_show_naked_quadruples(int) {
   prop.show_naked_quadruples = !prop.show_naked_quadruples;
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_update_request_by_child(int from_child) {
@@ -579,7 +577,6 @@ void w_Sudoku::on_update_request_by_child(int from_child) {
   // widget update
   update_all_cells();
 
-  return;
 }
 
 void w_Sudoku::on_value_changed_by_user(int from_child, int value) {
@@ -607,7 +604,6 @@ void w_Sudoku::remove_naked_singles() {
   
   emit update_parent();
 
-  return;
 }
 
 void w_Sudoku::remove_hidden_singles() {
@@ -620,7 +616,6 @@ void w_Sudoku::remove_hidden_singles() {
   
   emit update_parent();
 
-  return;
 }
 
 void w_Sudoku::remove_naked_twins() {
@@ -633,7 +628,6 @@ void w_Sudoku::remove_naked_twins() {
 
   emit update_parent();
 
-  return;
 }
 
 void w_Sudoku::remove_hidden_twins() {
@@ -646,7 +640,6 @@ void w_Sudoku::remove_hidden_twins() {
 
   emit update_parent();
 
-  return;
 }
 
 void w_Sudoku::remove_naked_triples() {
@@ -659,7 +652,6 @@ void w_Sudoku::remove_naked_triples() {
 
   emit update_parent();
 
-  return;
 }
 
 void w_Sudoku::remove_hidden_triples() {
@@ -672,7 +664,6 @@ void w_Sudoku::remove_hidden_triples() {
 
   emit update_parent();
 
-  return;
 }
 
 void w_Sudoku::remove_naked_quadruples() {
@@ -685,7 +676,18 @@ void w_Sudoku::remove_naked_quadruples() {
 
   emit update_parent();
 
-  return;
+}
+
+void w_Sudoku::remove_all() {
+
+  store_sudoku_for_undo(s);
+  int num_removed = sudoku_remove_all(s);
+  emit text_msg(QString::number(num_removed) + QString(" Einträge geändert."));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+
+  emit update_parent();
+
 }
 
 void w_Sudoku::undo_requested() {
@@ -699,8 +701,7 @@ void w_Sudoku::undo_requested() {
   }
   
   emit update_parent();
-  
-  return;
+ 
 }
 
 void w_Sudoku::mark_cells_as_solution_regions() {
@@ -770,14 +771,12 @@ void w_Sudoku::mark_cells_as_solution_regions() {
     cell_prop[cnt4].cell_marked_as_naked_quadruple = true;
   }
 
-  return;
 }
 
 void w_Sudoku::store_sudoku_for_undo(Sudoku sh) {
   
   undo.push_back(sh);
 
-  return;
 }
 
 Sudoku w_Sudoku::retrieve_from_undo() {

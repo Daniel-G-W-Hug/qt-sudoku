@@ -68,6 +68,7 @@ private:
   QPushButton* remove_naked_triples_button;
   QPushButton* remove_hidden_triples_button;
   QPushButton* remove_naked_quadruples_button;
+  QPushButton* remove_automatic_button;
   QPushButton* undo_button;
   QGroupBox* solver_widget;
 

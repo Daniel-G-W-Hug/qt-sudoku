@@ -11,6 +11,4 @@ void dynamic_assert(bool assertion, string message) {
     cout << "Terminating.\n";
     terminate();
   }
-
-  return;
 }

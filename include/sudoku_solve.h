@@ -9,11 +9,16 @@
 #include <map>
 #include <tuple>
 
-enum class Sudoku_solution_t {
+enum Sudoku_solution_t {
   naked_single,
   hidden_single,
   naked_twin,
-  hidden_twin
+  hidden_twin,
+  naked_triple,
+  hidden_triple,
+  naked_quadruple,
+  enum_count // helper for counting entries in enum
+             // (add additional entries before count)
 };  // solution types
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +44,11 @@ const map<Sudoku_solution_t, string> Sudoku_solution_type{
     {Sudoku_solution_t::naked_single, "single"},
     {Sudoku_solution_t::hidden_single, "hidden single"},
     {Sudoku_solution_t::naked_twin, "twin"},
-    {Sudoku_solution_t::hidden_twin, "hidden twin"}};
+    {Sudoku_solution_t::hidden_twin, "hidden twin"},
+    {Sudoku_solution_t::naked_triple, "triple"},
+    {Sudoku_solution_t::hidden_triple, "hidden triple"},
+    {Sudoku_solution_t::naked_quadruple, "quadruple"}
+};
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // solution vectors (used for listing solution types)
@@ -173,3 +182,8 @@ bool sudoku_has_naked_quadruples(const Sudoku& s);
 // solution steps (return no. of removed naked quadruples)
 // just reduces candidate lists of cells in region, does not fill in cells
 int sudoku_remove_naked_quadruples(Sudoku& s);
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// remove all types of singles, twins, etc. automatically
+//////////////////////////////////////////////////////////////////////////////////////////
+int sudoku_remove_all(Sudoku& s);
