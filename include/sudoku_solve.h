@@ -5,21 +5,22 @@
 
 #include "sudoku_class.h"
 
-#include <algorithm>  // std::unique
+#include <algorithm>    // std::unique, std::sort
 #include <map>
 #include <tuple>
+#include <utility>    // std::pair
 
 enum Sudoku_solution_t {
-  naked_single,
-  hidden_single,
-  naked_twin,
-  hidden_twin,
-  naked_triple,
-  hidden_triple,
-  naked_quadruple,
-  enum_count // helper for counting entries in enum
-             // (add additional entries before count)
-};  // solution types
+    naked_single,
+    hidden_single,
+    naked_twin,
+    hidden_twin,
+    naked_triple,
+    hidden_triple,
+    naked_quadruple,
+    enum_count    // helper for counting entries in enum
+                  // (add additional entries before count)
+};                // solution types
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //  naked_single:  only one candidate left in empty cell
@@ -47,8 +48,7 @@ const map<Sudoku_solution_t, string> Sudoku_solution_type{
     {Sudoku_solution_t::hidden_twin, "hidden twin"},
     {Sudoku_solution_t::naked_triple, "triple"},
     {Sudoku_solution_t::hidden_triple, "hidden triple"},
-    {Sudoku_solution_t::naked_quadruple, "quadruple"}
-};
+    {Sudoku_solution_t::naked_quadruple, "quadruple"}};
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // solution vectors (used for listing solution types)
@@ -90,10 +90,14 @@ void sudoku_update_candidates_all_cells(Sudoku& s);
 //////////////////////////////////////////////////////////////////////////////////////////
 // check for valid and unique entries in region
 bool sudoku_has_unique_entries_in_region(const Sudoku& s, const Region_t region);
-bool sudoku_is_valid(const Sudoku& s);  // valid and unique entries in each region
-int sudoku_num_entries(
-    const Sudoku& s);                   // return no. of entries != 0 (non empty entries)
-int sudoku_num_empty(const Sudoku& s);  // return no. of entries == 0 (empty entries)
+// check for sufficient number of candidates in region compared with no. of empty cells
+bool sudoku_has_sufficient_candidates_in_region(const Sudoku& s, const Region_t region);
+bool sudoku_has_unique_single_candidates_in_region(const Sudoku& s,
+                                                   const Region_t region);
+bool sudoku_is_valid(const Sudoku& s);   // valid and unique entries in each region
+int sudoku_num_entries(const Sudoku& s); // return no. of entries != 0 (non-empty)
+int sudoku_num_empty(const Sudoku& s);   // return no. of entries == 0 (empty)
+int sudoku_get_empty(const Sudoku& s);   // return index of first empty cell
 
 // has_candidates is true, if for entries == 0 there are still candidates available
 int sudoku_num_candidates(const Sudoku& s);
@@ -174,7 +178,7 @@ int sudoku_remove_hidden_triples(Sudoku& s);
 // naked quadruples
 //////////////////////////////////////////////////////////////////////////////////////////
 quad_vec sudoku_naked_quadruples_in_subregion(const Sudoku& s, const Region_t region,
-					      const int subregion);
+                                              const int subregion);
 quad_vec sudoku_naked_quadruples_in_region(const Sudoku& s, const Region_t region);
 quad_vec sudoku_naked_quadruples(const Sudoku& s);
 int sudoku_num_naked_quadruples(const Sudoku& s);
@@ -184,6 +188,18 @@ bool sudoku_has_naked_quadruples(const Sudoku& s);
 int sudoku_remove_naked_quadruples(Sudoku& s);
 
 //////////////////////////////////////////////////////////////////////////////////////////
+// recursively try values in cell - start with cell with smallest no. of candidates left
+// due to recursion use copy of Sudoku instead of reference
+//////////////////////////////////////////////////////////////////////////////////////////
+std::pair<int, Sudoku> sudoku_remove_try_recursive(Sudoku s, int depth = 0);
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// number of enties solvable by algorithm
+//////////////////////////////////////////////////////////////////////////////////////////
+std::vector<int> sudoku_num_algo_solutions(const Sudoku& s);
+
+//////////////////////////////////////////////////////////////////////////////////////////
 // remove all types of singles, twins, etc. automatically
 //////////////////////////////////////////////////////////////////////////////////////////
 int sudoku_remove_all(Sudoku& s);
+//

@@ -5,6 +5,7 @@
 //#include "sudoku_print.h"  // debugging only
 
 #include <QtWidgets>
+#include <utility>  //for std::pair
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 // w_Sudoku_cell
@@ -671,6 +672,19 @@ void w_Sudoku::remove_naked_quadruples() {
   store_sudoku_for_undo(s);
   int num_removed = sudoku_remove_naked_quadruples(s);
   emit text_msg(QString::number(num_removed) + QString(" naked quadruple(s) entfernt."));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+
+  emit update_parent();
+
+}
+
+void w_Sudoku::remove_try_recursive() {
+
+  store_sudoku_for_undo(s);
+  int num_removed;
+  std::tie(num_removed,s) = sudoku_remove_try_recursive(s);
+  emit text_msg(QString::number(num_removed) + QString(" Einträge geändert."));
   update_sudoku_solution_type_vectors();
   update_all_cells();
 

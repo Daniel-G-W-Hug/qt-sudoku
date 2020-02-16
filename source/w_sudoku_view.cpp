@@ -159,6 +159,10 @@ void w_Sudoku_view::createSolverWidget() {
   connect(remove_naked_quadruples_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_naked_quadruples()));
 
+  remove_try_recursive_button = new QPushButton("Entferne rekursiv");
+  connect(remove_try_recursive_button, SIGNAL(clicked()), sudoku_widget,
+          SLOT(remove_try_recursive()));
+
   remove_automatic_button = new QPushButton("Entferne alle");
   connect(remove_automatic_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_all()));
@@ -228,8 +232,9 @@ void w_Sudoku_view::createSolverWidget() {
   gridlayout->addWidget(num_naked_quadruples, 6, 1);
   gridlayout->addWidget(remove_naked_quadruples_button, 6, 2);
 
-  gridlayout->addWidget(remove_automatic_button, 7, 2);
-  gridlayout->addWidget(undo_button, 8, 2);
+  gridlayout->addWidget(remove_try_recursive_button, 7, 2);
+  gridlayout->addWidget(remove_automatic_button, 8, 2);
+  gridlayout->addWidget(undo_button, 9, 2);
 
   solver_widget->setLayout(gridlayout);
 

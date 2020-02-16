@@ -134,6 +134,7 @@ private slots:
   void remove_naked_triples();
   void remove_hidden_triples();
   void remove_naked_quadruples();
+  void remove_try_recursive();
   void remove_all();
 
   void undo_requested();

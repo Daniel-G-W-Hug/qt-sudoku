@@ -22,10 +22,28 @@ using std::vector;
 // "sudoku_solve.cpp"
 //
 
+// number of empty entries in subregion
+int sudoku_num_empty_in_subregion(const Sudoku& s, const Region_t region,
+                                  const int subregion);
+
+// number of unique candidates in subregion
+int sudoku_num_unique_candidates_in_subregion(const Sudoku& s, const Region_t region,
+                                              const int subregion);
+
+// concatenate single candidate sets in subregion
+multiset<int> sudoku_concatenate_single_candidate_sets_in_subregion(const Sudoku& s,
+                                                                    const Region_t region,
+                                                                    const int subregion);
+
 // concatenate candidate sets in subregion
 multiset<int> sudoku_concatenate_candidate_sets_in_subregion(const Sudoku& s,
                                                              const Region_t region,
                                                              const int subregion);
+
+// count how often which sudoku entry occurs in single candidate list
+vector<int> sudoku_count_single_candidate_entries_in_subregion(const Sudoku& s,
+                                                               const Region_t region,
+                                                               const int subregion);
 
 // count how often which sudoku entry occurs in list
 vector<int> sudoku_count_candidate_entries_in_subregion(const Sudoku& s,
