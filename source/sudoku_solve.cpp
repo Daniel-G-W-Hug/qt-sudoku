@@ -1255,7 +1255,7 @@ int sudoku_remove_naked_quadruples(Sudoku& s) {
 //  - start to try candidate values for cell with lowest no. of candidates
 //  - solve to see wether contradiction occurs, otherwise return modified sudoku
 //////////////////////////////////////////////////////////////////////////////////////////
-std::pair<int, Sudoku> sudoku_remove_try_recursive(Sudoku s, int lvl) {
+std::pair<int, Sudoku> sudoku_remove_recursive(Sudoku s, int lvl) {
 
     // for debugging only: prefix string for output dependent on recursion level
     // std::string prefix = std::to_string(lvl) + ": ";
@@ -1327,7 +1327,7 @@ std::pair<int, Sudoku> sudoku_remove_try_recursive(Sudoku s, int lvl) {
                 // could not find algorithmic solution => further recursion
                 // std::cout << prefix << "calling try_recursive.\n\n";
                 int num_removed_rec;
-                std::tie(num_removed_rec, s) = sudoku_remove_try_recursive(s, lvl + 1);
+                std::tie(num_removed_rec, s) = sudoku_remove_recursive(s, lvl + 1);
 
                 if (num_removed_rec == 0) {
 
@@ -1392,7 +1392,7 @@ std::vector<int> sudoku_num_algo_solutions(const Sudoku& s) {
 //////////////////////////////////////////////////////////////////////////////////////////
 // remove all types of singles, twins, etc. automatically
 //////////////////////////////////////////////////////////////////////////////////////////
-int sudoku_remove_all(Sudoku& s) {
+int sudoku_remove_algo_all(Sudoku& s) {
 
     int num_entries_before = sudoku_num_entries(s);
 
@@ -1443,7 +1443,7 @@ int sudoku_remove_all(Sudoku& s) {
     // int num_sol_recursions = -1;
     // while (num_sol_recursions !=0 && sudoku_is_valid(s) &&
     // sudoku_num_entries(s)<s.total_size) {
-    //	num_sol_recursions = sudoku_remove_try_recursive(s);
+    //	num_sol_recursions = sudoku_remove_recursive(s);
     //}
 
     return sudoku_num_entries(s) -

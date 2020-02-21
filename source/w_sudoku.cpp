@@ -679,11 +679,11 @@ void w_Sudoku::remove_naked_quadruples() {
 
 }
 
-void w_Sudoku::remove_try_recursive() {
+void w_Sudoku::remove_recursive() {
 
   store_sudoku_for_undo(s);
   int num_removed;
-  std::tie(num_removed,s) = sudoku_remove_try_recursive(s);
+  std::tie(num_removed,s) = sudoku_remove_recursive(s);
   emit text_msg(QString::number(num_removed) + QString(" Einträge geändert."));
   update_sudoku_solution_type_vectors();
   update_all_cells();
@@ -692,10 +692,10 @@ void w_Sudoku::remove_try_recursive() {
 
 }
 
-void w_Sudoku::remove_all() {
+void w_Sudoku::remove_algo_all() {
 
   store_sudoku_for_undo(s);
-  int num_removed = sudoku_remove_all(s);
+  int num_removed = sudoku_remove_algo_all(s);
   emit text_msg(QString::number(num_removed) + QString(" Einträge geändert."));
   update_sudoku_solution_type_vectors();
   update_all_cells();
