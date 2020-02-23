@@ -188,10 +188,9 @@ bool sudoku_has_naked_quadruples(const Sudoku& s);
 int sudoku_remove_naked_quadruples(Sudoku& s);
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// recursively try values in cell - start with cell with smallest no. of candidates left
-// due to recursion use copy of Sudoku instead of reference
+// recursively try candidate values in cell
 //////////////////////////////////////////////////////////////////////////////////////////
-std::pair<int, Sudoku> sudoku_remove_recursive(Sudoku s, int depth = 0);
+std::pair<int, Sudoku> sudoku_remove_recursive(Sudoku s, int lvl = 0);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // number of enties solvable by algorithm
@@ -199,7 +198,12 @@ std::pair<int, Sudoku> sudoku_remove_recursive(Sudoku s, int depth = 0);
 std::vector<int> sudoku_num_algo_solutions(const Sudoku& s);
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// remove all types of singles, twins, etc. automatically
+// remove all types of singles, twins, etc. by algorithm
 //////////////////////////////////////////////////////////////////////////////////////////
 int sudoku_remove_algo_all(Sudoku& s);
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// recursively try candidate values in cell using algo solutions if available
+//////////////////////////////////////////////////////////////////////////////////////////
+std::pair<int, Sudoku> sudoku_remove_recursive_algo_all_mixed(Sudoku s, int lvl = 0);
 //

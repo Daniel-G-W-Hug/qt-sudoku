@@ -136,6 +136,7 @@ private slots:
   void remove_naked_quadruples();
   void remove_recursive();
   void remove_algo_all();
+  void remove_recursive_algo_all_mixed();
 
   void undo_requested();
 

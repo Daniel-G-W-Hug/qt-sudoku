@@ -159,13 +159,17 @@ void w_Sudoku_view::createSolverWidget() {
   connect(remove_naked_quadruples_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_naked_quadruples()));
 
-  remove_recursive_button = new QPushButton("Entferne rekursiv");
+  remove_recursive_button = new QPushButton("Entferne alle rekursiv");
   connect(remove_recursive_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_recursive()));
 
-  remove_automatic_button = new QPushButton("Entferne alle");
-  connect(remove_automatic_button, SIGNAL(clicked()), sudoku_widget,
+  remove_algo_all_button = new QPushButton("Entferne alle Algo");
+  connect(remove_algo_all_button, SIGNAL(clicked()), sudoku_widget,
           SLOT(remove_algo_all()));
+
+  remove_recursive_algo_all_mixed_button = new QPushButton("Entferne alle mixed");
+  connect(remove_recursive_algo_all_mixed_button, SIGNAL(clicked()), sudoku_widget,
+          SLOT(remove_recursive_algo_all_mixed()));
 
   undo_button = new QPushButton("Rückgängig");
   connect(undo_button, SIGNAL(clicked()), sudoku_widget, SLOT(undo_requested()));
@@ -233,8 +237,9 @@ void w_Sudoku_view::createSolverWidget() {
   gridlayout->addWidget(remove_naked_quadruples_button, 6, 2);
 
   gridlayout->addWidget(remove_recursive_button, 7, 2);
-  gridlayout->addWidget(remove_automatic_button, 8, 2);
-  gridlayout->addWidget(undo_button, 9, 2);
+  gridlayout->addWidget(remove_algo_all_button, 8, 2);
+  gridlayout->addWidget(remove_recursive_algo_all_mixed_button, 9, 2);
+  gridlayout->addWidget(undo_button, 10, 2);
 
   solver_widget->setLayout(gridlayout);
 

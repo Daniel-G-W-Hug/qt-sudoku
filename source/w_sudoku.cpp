@@ -6,6 +6,7 @@
 
 #include <QtWidgets>
 #include <utility>  //for std::pair
+#include <chrono>
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 // w_Sudoku_cell
@@ -683,8 +684,12 @@ void w_Sudoku::remove_recursive() {
 
   store_sudoku_for_undo(s);
   int num_removed;
+  auto t1 = std::chrono::high_resolution_clock::now();
   std::tie(num_removed,s) = sudoku_remove_recursive(s);
-  emit text_msg(QString::number(num_removed) + QString(" Einträge geändert."));
+  auto t2 = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
+  std::string it_took = std::to_string(duration) + " ms";
+  emit text_msg(QString::number(num_removed) + QString(" Einträge geändert. It took ") + QString::fromStdString(it_took));
   update_sudoku_solution_type_vectors();
   update_all_cells();
 
@@ -695,8 +700,29 @@ void w_Sudoku::remove_recursive() {
 void w_Sudoku::remove_algo_all() {
 
   store_sudoku_for_undo(s);
+  auto t1 = std::chrono::high_resolution_clock::now();
   int num_removed = sudoku_remove_algo_all(s);
-  emit text_msg(QString::number(num_removed) + QString(" Einträge geändert."));
+  auto t2 = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
+  std::string it_took = std::to_string(duration) + " ms";
+  emit text_msg(QString::number(num_removed) + QString(" Einträge geändert. It took ") + QString::fromStdString(it_took));
+  update_sudoku_solution_type_vectors();
+  update_all_cells();
+
+  emit update_parent();
+
+}
+
+void w_Sudoku::remove_recursive_algo_all_mixed() {
+
+  store_sudoku_for_undo(s);
+  int num_removed;
+  auto t1 = std::chrono::high_resolution_clock::now();
+  std::tie(num_removed,s) = sudoku_remove_recursive_algo_all_mixed(s);
+  auto t2 = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
+  std::string it_took = std::to_string(duration) + " ms";
+  emit text_msg(QString::number(num_removed) + QString(" Einträge geändert. It took ") + QString::fromStdString(it_took));
   update_sudoku_solution_type_vectors();
   update_all_cells();
 

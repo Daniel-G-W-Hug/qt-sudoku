@@ -1245,15 +1245,9 @@ int sudoku_remove_naked_quadruples(Sudoku& s) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// recursively try values in cell - start with cell with smallest no. of candidates left
+// recursively try values in cell
 //
 // assumption on input: valid sudoku with some empty cells left
-//
-// algo:
-//  - start: generate sorted vector<pair<count_of_candidates_left,cell-no>> for empty
-//  cells
-//  - start to try candidate values for cell with lowest no. of candidates
-//  - solve to see wether contradiction occurs, otherwise return modified sudoku
 //////////////////////////////////////////////////////////////////////////////////////////
 std::pair<int, Sudoku> sudoku_remove_recursive(Sudoku s, int lvl) {
 
@@ -1296,36 +1290,8 @@ std::pair<int, Sudoku> sudoku_remove_recursive(Sudoku s, int lvl) {
             if (sudoku_num_empty(s) > 0) {
 
                 // there are further candidates to look for
-
-                // std::vector<int> sol_count = sudoku_num_algo_solutions(s);
-                // int num_sol = std::accumulate(sol_count.cbegin(), sol_count.cend(), 0);
-                // std::cout << prefix << "num_sol = " << num_sol << "\n";
-
-                // if (num_sol > 0) {
-
-                //     // algorithmic solution possible
-                //     std::cout << prefix << "calling algo:\n";
-                //     int num_removed_algo = sudoku_remove_all(s);
-
-                //     std::cout << prefix << "algo, num_removed_algo = " <<
-                //     num_removed_algo
-                // << "\n";
-
-                //     if (sudoku_is_valid(s) && num_removed_algo > 0) {
-                //         // valid algorithmic solution found
-                //         int removed_by_algo = num_empty_before - sudoku_num_empty(s);
-                //         std::cout << prefix << "return from algo with " <<
-                //         removed_by_algo
-                // << " removed.\n\n"; return std::make_pair(removed_by_algo,s); } else {
-                //         std::cout << prefix << "sudoku invalid (inner - algo) , i.e.
-                //         try
-                // next candidate value\n\n"; continue;
-                //     }
-
-                // } else {
-
-                // could not find algorithmic solution => further recursion
-                // std::cout << prefix << "calling try_recursive.\n\n";
+                // => further recursion
+                // std::cout << prefix << "calling sudoku_remove_recursive.\n\n";
                 int num_removed_rec;
                 std::tie(num_removed_rec, s) = sudoku_remove_recursive(s, lvl + 1);
 
@@ -1365,8 +1331,6 @@ std::pair<int, Sudoku> sudoku_remove_recursive(Sudoku s, int lvl) {
         }
     }
 
-    // assumption: first found solution w/o contradiction is valid solution
-    // this should not be reached
     // std::cout << prefix << "Reached end of routine. No candiates left for cell ";
     // std::cout << cnt << ".\n\n";
     s = s_old;    // restore and return unmodified state
@@ -1390,7 +1354,7 @@ std::vector<int> sudoku_num_algo_solutions(const Sudoku& s) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// remove all types of singles, twins, etc. automatically
+// remove all types of singles, twins, etc. by algorithm
 //////////////////////////////////////////////////////////////////////////////////////////
 int sudoku_remove_algo_all(Sudoku& s) {
 
@@ -1449,3 +1413,132 @@ int sudoku_remove_algo_all(Sudoku& s) {
     return sudoku_num_entries(s) -
            num_entries_before;    // return number of removed entries
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// recursively try candidate values in cell using algo solutions if available
+//////////////////////////////////////////////////////////////////////////////////////////
+std::pair<int, Sudoku> sudoku_remove_recursive_algo_all_mixed(Sudoku s, int lvl) {
+
+    // for debugging only: prefix string for output dependent on recursion level
+    // std::string prefix = std::to_string(lvl) + ": ";
+    // for (int i = 0; i < lvl; ++i) { prefix = " " + prefix; }
+
+    // pre-conditions: sudoku is valid and still has empty cells
+    int num_empty_before = sudoku_num_empty(s);
+    if (!sudoku_is_valid(s) || num_empty_before == 0) {
+        // std::cout << prefix << "pre-conditions not met!\n\n";
+        return std::make_pair(0, s);    // return sudoku unchanged
+    }
+
+    // find first non-empty cells
+    int cnt = sudoku_get_empty(s);
+    // returns valid index for first non-empty cell, since num_empty_before > 0
+
+    auto s_old     = s;    // store initial sudoku unmodified
+    bool first_run = true;
+
+    for (auto const& cv : s_old(cnt).cand) {
+
+        // std::cout << prefix << "cnt = " << cnt << "\n";
+        // std::cout << prefix << "cv = " << cv << "\n";
+
+        if (first_run)
+            first_run = false;
+        else
+            s = s_old;    // restore initial state for next try
+
+        s(cnt).val = cv;    // set candidate value
+        sudoku_update_candidates_affected_by_cell(s, cnt);
+
+        // std::cout << prefix << "removed cv = " << cv << " in cell " << cnt << "\n";
+
+        if (sudoku_is_valid(s)) {
+            // if the sudoku is still valid, we can go on
+
+            if (sudoku_num_empty(s) > 0) {
+
+                // there are further candidates to look for
+
+                std::vector<int> sol_count = sudoku_num_algo_solutions(s);
+                int num_sol = std::accumulate(sol_count.cbegin(), sol_count.cend(), 0);
+                // std::cout << prefix << "num_sol = " << num_sol << "\n";
+
+                if (num_sol > 0) {
+
+                    // if algorithmic solution possible, remove candidates
+                    // std::cout << prefix << "calling algo:\n";
+
+                    int num_removed_algo = sudoku_remove_algo_all(s);
+                    // std::cout << prefix << "algo, num_removed_algo = ";
+                    // std::cout << num_removed_algo << "\n";
+
+                    bool is_valid_after_algo = sudoku_is_valid(s);
+                    int num_empty = sudoku_num_empty(s);
+
+                    if (num_removed_algo > 0 && is_valid_after_algo && num_empty == 0) {
+                        // all solutions found
+                        int num_removed_by_algo = num_empty_before - num_empty;
+                        // std::cout << prefix
+                        //           << "num_removed_by_algo = " << num_removed_by_algo
+                        //           << "\n";
+                        return std::make_pair(num_removed_by_algo, s);
+                    }
+
+                    if (num_removed_algo > 0 && !is_valid_after_algo) {
+
+                        // no suitable candidates found
+                        // for this selection, thus try other candidate
+                        // std::cout << prefix << "sudoku recursive algo subsearch ";
+                        // std::cout << "unsuccessful.\n\n";
+                        continue;
+                    }
+                }
+
+                // algorithmic solution not possible => further recursion
+                // std::cout << prefix << "calling recursive.\n\n";
+                int num_removed_rec;
+                std::tie(num_removed_rec, s) =
+                    sudoku_remove_recursive_algo_all_mixed(s, lvl + 1);
+
+                if (num_removed_rec == 0) {
+
+                    // no suitable candidates found in recursive search
+                    // for this selection, thus try other candidate
+                    // std::cout << prefix << "sudoku recursive subsearch ";
+                    // std::cout << "unsuccessful.\n";
+                    continue;
+                }
+
+                int num_removed_recursive = num_empty_before - sudoku_num_empty(s);
+                // std::cout << prefix << "num_removed_recursive = " <<
+                // num_removed_recursive << "\n";
+                return std::make_pair(num_removed_recursive, s);
+            }
+
+            if (sudoku_num_empty(s) == 0) {
+
+                // there are no further candidates to look for
+                // i.e. last empty value was found and the sudoku is solved -
+                // recursion ends
+                int num_removed = num_empty_before - sudoku_num_empty(s);
+                // std::cout << prefix << "num_removed = " << num_removed << "\n\n";
+                return std::make_pair(num_removed, s);
+            }
+        }
+
+        else {
+            // sudoku is not valid any more using this candidate, i.e. a contradiction
+            // occurred we have to try another candidate
+
+            // std::cout << prefix << "sudoku invalid (inner - recursive)\n\n";
+            continue;
+        }
+    }
+
+    // std::cout << prefix << "Reached end of routine. No candiates left for cell ";
+    // std::cout << cnt << ".\n\n";
+    s = s_old;    // restore and return unmodified state
+    return std::make_pair(0, s);
+}
+
+//
