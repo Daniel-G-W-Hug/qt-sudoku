@@ -5,8 +5,8 @@
 
 #include "sudoku_class.h"
 
-#include <algorithm> // equal()
-#include <iterator>  // prev(), next()
+#include <algorithm>    // equal()
+#include <iterator>     // prev(), next()
 #include <list>
 #include <set>
 #include <tuple>
@@ -59,5 +59,5 @@ sudoku_candidate_positions_in_subregion(const Sudoku& s, const Region_t region,
 // test whether sets are pairwise different (either different size() or different
 // content) if size of a set is 2
 bool pairwise_different_if_size2(const set<int>& a, const set<int>& b, const set<int>& c);
-bool pairwise_different_if_size2(const set<int>& a, const set<int>& b,
-                                 const set<int>& c, const set<int>& d);
+bool pairwise_different_if_size2(const set<int>& a, const set<int>& b, const set<int>& c,
+                                 const set<int>& d);

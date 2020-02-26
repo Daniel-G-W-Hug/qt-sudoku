@@ -22,22 +22,22 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 class PlainTextEditIODevice : public QIODevice {
-  Q_OBJECT
-public:
-  PlainTextEditIODevice(QPlainTextEdit* const textWidget, QObject* const parent = 0) :
-      QIODevice(parent), textWidget(textWidget) {
-    open(QIODevice::WriteOnly | QIODevice::Text);
-  }
+    Q_OBJECT
+  public:
+    PlainTextEditIODevice(QPlainTextEdit* const textWidget, QObject* const parent = 0) :
+        QIODevice(parent), textWidget(textWidget) {
+        open(QIODevice::WriteOnly | QIODevice::Text);
+    }
 
-protected:
-  qint64 readData(char* data, qint64 maxSize) { return 0; }
-  qint64 writeData(const char* data, qint64 maxSize) {
-    if (textWidget) { textWidget->insertPlainText(data); }
-    return maxSize;
-  }
+  protected:
+    qint64 readData(char* data, qint64 maxSize) { return 0; }
+    qint64 writeData(const char* data, qint64 maxSize) {
+        if (textWidget) { textWidget->insertPlainText(data); }
+        return maxSize;
+    }
 
-private:
-  QPlainTextEdit* const textWidget;
+  private:
+    QPlainTextEdit* const textWidget;
 };
 
-#endif  // QTEXTWIDGET_H
+#endif    // QTEXTWIDGET_H

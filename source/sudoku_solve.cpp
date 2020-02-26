@@ -1245,7 +1245,7 @@ int sudoku_remove_naked_quadruples(Sudoku& s) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// recursively try values in cell
+// recursively try values in cell (brute force recursion)
 //
 // assumption on input: valid sudoku with some empty cells left
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1323,8 +1323,8 @@ std::pair<int, Sudoku> sudoku_remove_recursive(Sudoku s, int lvl) {
         }
 
         else {
-            // sudoku is not valid any more using this candidate, i.e. a contradiction
-            // occurred we have to try another candidate
+            // Sudoku is not valid any more using this candidate, i.e. a contradiction
+            // occurred. We have to try another candidate.
 
             // std::cout << prefix << "sudoku invalid (inner - recursive)\n\n";
             continue;
@@ -1430,6 +1430,10 @@ std::pair<int, Sudoku> sudoku_remove_recursive_algo_all_mixed(Sudoku s, int lvl)
         return std::make_pair(0, s);    // return sudoku unchanged
     }
 
+    // Might be further optimized here if we test whether the algo solution works, before
+    // we start the recursive (mixed) approach. This can also be reached by calling
+    // sudoku_remove_algo_all before trying the recursive approaches)
+
     // find first non-empty cells
     int cnt = sudoku_get_empty(s);
     // returns valid index for first non-empty cell, since num_empty_before > 0
@@ -1473,7 +1477,7 @@ std::pair<int, Sudoku> sudoku_remove_recursive_algo_all_mixed(Sudoku s, int lvl)
                     // std::cout << num_removed_algo << "\n";
 
                     bool is_valid_after_algo = sudoku_is_valid(s);
-                    int num_empty = sudoku_num_empty(s);
+                    int num_empty            = sudoku_num_empty(s);
 
                     if (num_removed_algo > 0 && is_valid_after_algo && num_empty == 0) {
                         // all solutions found
@@ -1527,8 +1531,8 @@ std::pair<int, Sudoku> sudoku_remove_recursive_algo_all_mixed(Sudoku s, int lvl)
         }
 
         else {
-            // sudoku is not valid any more using this candidate, i.e. a contradiction
-            // occurred we have to try another candidate
+            // Sudoku is not valid any more using this candidate, i.e. a contradiction
+            // occurred. We have to try another candidate.
 
             // std::cout << prefix << "sudoku invalid (inner - recursive)\n\n";
             continue;

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <exception>  // terminate()
+#include <exception>    // terminate()
 #include <iostream>
 #include <string>
 

@@ -4,11 +4,11 @@
 #include "dyn_assert.h"
 
 void dynamic_assert(bool assertion, string message) {
-  if (assertion) {
-    return;
-  } else {
-    cout << message << "\n";
-    cout << "Terminating.\n";
-    terminate();
-  }
+    if (assertion) {
+        return;
+    } else {
+        cout << message << "\n";
+        cout << "Terminating.\n";
+        terminate();
+    }
 }

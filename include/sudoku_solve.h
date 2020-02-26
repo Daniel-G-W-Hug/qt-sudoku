@@ -94,10 +94,10 @@ bool sudoku_has_unique_entries_in_region(const Sudoku& s, const Region_t region)
 bool sudoku_has_sufficient_candidates_in_region(const Sudoku& s, const Region_t region);
 bool sudoku_has_unique_single_candidates_in_region(const Sudoku& s,
                                                    const Region_t region);
-bool sudoku_is_valid(const Sudoku& s);   // valid and unique entries in each region
-int sudoku_num_entries(const Sudoku& s); // return no. of entries != 0 (non-empty)
-int sudoku_num_empty(const Sudoku& s);   // return no. of entries == 0 (empty)
-int sudoku_get_empty(const Sudoku& s);   // return index of first empty cell
+bool sudoku_is_valid(const Sudoku& s);      // valid and unique entries in each region
+int sudoku_num_entries(const Sudoku& s);    // return no. of entries != 0 (non-empty)
+int sudoku_num_empty(const Sudoku& s);      // return no. of entries == 0 (empty)
+int sudoku_get_empty(const Sudoku& s);      // return index of first empty cell
 
 // has_candidates is true, if for entries == 0 there are still candidates available
 int sudoku_num_candidates(const Sudoku& s);
