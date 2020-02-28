@@ -52,10 +52,10 @@ template <> struct fmt::formatter<Sudoku_cell> {
         auto out = ctx.out();
 
         out = format_to(out, "Sudoku_cell({}):\n", c.cnt);
-        out = format_to(out, "  val = {}\n", c.val);
         out = format_to(out, "  ri = {}, rj = {}\n", c.ri, c.rj);
         out = format_to(out, "  ci = {}, cj = {}\n", c.ci, c.cj);
         out = format_to(out, "  bi = {}, bj = {}\n", c.bi, c.bj);
+        out = format_to(out, "  val = {}\n", c.val);
         out = format_to(out, "  cand = {}", c.cand);
 
         return out;
@@ -75,21 +75,68 @@ template <> struct fmt::formatter<Region_t> : formatter<string_view> {
     }
 };
 
-template <> struct fmt::formatter<Region_access> {
+template <> struct fmt::formatter<Sudoku> {
     template <typename ParseContext> constexpr auto parse(ParseContext& ctx) {
         return ctx.begin();
     }
 
-    template <typename FormatContext>
-    auto format(const Region_access& ra, FormatContext& ctx) {
+    template <typename FormatContext> auto format(const Sudoku& s, FormatContext& ctx) {
         // ctx.out() is an output iterator to write to.
         auto out = ctx.out();
 
-        // friend class fmt::formatter<Region_access>;	// allow printing of private
-        // members (in sudoku_class.h)
-        out = format_to(out, "address of Sudoku: {}\n", std::addressof(ra.m_s));
-        out = format_to(out, "  m_region = {}\n", ra.m_region);
-        out = format_to(out, "  m_rv = {}", ra.m_rv);
+        out = format_to(out,
+                        "region_size = {}, blocks_per_row = {}, blocks_per_col = "
+                        "{}, total_size = {}\n\n",
+                        s.region_size, s.blocks_per_row, s.blocks_per_col, s.total_size);
+        
+        out = format_to(out, "Sudoku values:\n   ");
+        for (int i = 0; i < s.region_size; ++i) { out = format_to(out, "{}: ", i); }
+        for (int cnt = 0; cnt < s.total_size; ++cnt) {
+            if (cnt % s.region_size == 0) {
+                out = format_to(out, "\n{}: ", cnt / s.region_size);
+            }
+            out = format_to(out, "{}", s(cnt).val);
+            if ((cnt + 1) % s.region_size != 0) { out = format_to(out, ", "); }
+        }
+        out = format_to(out, "\n\n");
+
+        out = format_to(out, "Sudoku values by row:\n   ");
+        for (int i = 0; i < s.region_size; ++i) { out = format_to(out, "{}: ", i); }
+        for (int i = 0; i < s.region_size; ++i) {
+        	out = format_to(out, "\n{}: ", i);
+            for (int j = 0; j < s.region_size; ++j) {
+	            out = format_to(out, "{}", s.row(i,j).val);
+    	        if ((j + 1) % s.region_size != 0) { out = format_to(out, ", "); }
+    	    }
+        }
+        out = format_to(out, "\n\n");
+
+        out = format_to(out, "Sudoku values by col:\n   ");
+        for (int i = 0; i < s.region_size; ++i) { out = format_to(out, "{}: ", i); }
+        for (int i = 0; i < s.region_size; ++i) {
+        	out = format_to(out, "\n{}: ", i);
+            for (int j = 0; j < s.region_size; ++j) {
+	            out = format_to(out, "{}", s.col(i,j).val);
+    	        if ((j + 1) % s.region_size != 0) { out = format_to(out, ", "); }
+    	    }
+        }
+        out = format_to(out, "\n\n");
+
+        out = format_to(out, "Sudoku values by block:\n   ");
+        for (int i = 0; i < s.region_size; ++i) { out = format_to(out, "{}: ", i); }
+        for (int i = 0; i < s.region_size; ++i) {
+        	out = format_to(out, "\n{}: ", i);
+            for (int j = 0; j < s.region_size; ++j) {
+	            out = format_to(out, "{}", s.block(i,j).val);
+    	        if ((j + 1) % s.region_size != 0) { out = format_to(out, ", "); }
+    	    }
+        }
+        out = format_to(out, "\n\n");
+
+        out = format_to(out, "Sudoku candidates:\n");
+        for (int cnt = 0; cnt < s.total_size; ++cnt) {
+            out = format_to(out, "{:2}: {}\n", cnt, s(cnt).cand);
+        }
 
         return out;
     }

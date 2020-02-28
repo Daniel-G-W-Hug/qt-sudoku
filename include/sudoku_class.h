@@ -22,7 +22,6 @@ struct Sudoku_cell {
         cnt(t_cnt),
         ri(t_ri), rj(t_rj), ci(t_ci), cj(t_cj), bi(t_bi), bj(t_bj) {}
 
-    int val{0};              // entry value 0: empty indicator; 1..N for set value
     const int cnt;           // cell index of this cell within sudoku
     const int ri;            // row index the cell belongs to
     const int rj;            // index within the cell's row
@@ -30,6 +29,7 @@ struct Sudoku_cell {
     const int cj;            // index within the cell's col
     const int bi;            // block index the cell belongs to
     const int bj;            // index within the cell's block
+    int val{0};              // entry value 0: empty indicator; 1..N for set value
     std::set<int> cand{};    // set of remaining candidates for this cell
                              // (=remaining permissible entries)
 };
@@ -49,12 +49,12 @@ class Region_access {
 
     friend class fmt::formatter<Region_access>;    // allow printing of private members
 
-    Sudoku& m_s;                                    // reference to Sudoku instance
-    const Region_t m_region;                        // region type for this instance
+    Sudoku* const m_s;          // const pointer to non-const Sudoku instance (non-owning)
+    const Region_t m_region;    // region type for this instance
     std::vector<std::vector<Sudoku_cell*>> m_rv;    // region vectors (row/col/block)
 
   public:
-    Region_access(Sudoku& t_ref, const Region_t t_region);
+    Region_access(Sudoku& t_sref, const Region_t t_region);
 
     // to be called AFTER Sudoku entries are set up in Sudoku constructor
     // in order to set up access references depending on region type
@@ -77,8 +77,9 @@ class Region_access {
 };
 
 class Sudoku {
-    // access to regions
-    friend class Region_access;
+
+    friend class Region_access;             // allow access to regions
+    friend class fmt::formatter<Sudoku>;    // allow printing of private members
 
     std::vector<Sudoku_cell> m_cell;    // contains Sudoku entries
 
@@ -101,10 +102,10 @@ class Sudoku {
     Sudoku(const Sudoku& other_Sudoku);
     // copy assignment
     Sudoku& operator=(const Sudoku& other_Sudoku);
-    // // move
-    // Sudoku(Sudoku&& other_Sudoku);
-    // // move assignment
-    // Sudoku& operator=(Sudoku&& other_Sudoku);
+    // move
+    Sudoku(Sudoku&& other_Sudoku);
+    // move assignment
+    Sudoku& operator=(Sudoku&& other_Sudoku);
 
     // element access
     Sudoku_cell& operator()(int cnt);

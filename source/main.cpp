@@ -3,6 +3,7 @@
 #include "sudoku_read.h"
 #include "sudoku_solve.h"
 #include "sudoku_print.h"    // for debugging only
+#include "sudoku_class.h"
 #include "w_sudoku_view.h"
 
 #include <QApplication>
@@ -50,11 +51,6 @@ int main(int argc, char* argv[]) {
     // initialize sudoku with input values and initialize candidate values
     for (int cnt = 0; cnt < s.total_size; ++cnt) { s(cnt).val = read_int(input_stream); }
     sudoku_update_candidates_all_cells(s);
-
-    // for (int cnt = 0; cnt < s.total_size; ++cnt) {
-    //     fmt::print("{}\n", s(cnt));
-    // }
-    // fmt::print("Row_test:\n{}\n", &(s.row));
 
     w_Sudoku_view Sudoku_view(s);
     Sudoku_view.move(700, 100);
