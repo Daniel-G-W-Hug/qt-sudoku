@@ -177,7 +177,7 @@ Sudoku& Sudoku::operator=(const Sudoku& other_Sudoku) {
 //
 // Sudoku move constructor
 //
-Sudoku::Sudoku(Sudoku&& other_Sudoku) :
+Sudoku::Sudoku(Sudoku&& other_Sudoku) noexcept :
     region_size(other_Sudoku.region_size), blocks_per_row(other_Sudoku.blocks_per_row),
     blocks_per_col(other_Sudoku.blocks_per_col),
     total_size(other_Sudoku.region_size * other_Sudoku.region_size),
@@ -200,7 +200,7 @@ Sudoku::Sudoku(Sudoku&& other_Sudoku) :
 //
 // move assignment
 //
-Sudoku& Sudoku::operator=(Sudoku&& other_Sudoku) {
+Sudoku& Sudoku::operator=(Sudoku&& other_Sudoku) noexcept {
     // cout << "move assignment operator called\n";
 
     if (this != &other_Sudoku) {    // no self-assignment
@@ -219,7 +219,6 @@ Sudoku& Sudoku::operator=(Sudoku&& other_Sudoku) {
             m_cell[cnt].val  = std::move(other_Sudoku.m_cell[cnt].val);
             m_cell[cnt].cand = std::move(other_Sudoku.m_cell[cnt].cand);
         }
-
     }
 
     return *this;

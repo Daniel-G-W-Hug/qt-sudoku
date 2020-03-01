@@ -103,9 +103,9 @@ class Sudoku {
     // copy assignment
     Sudoku& operator=(const Sudoku& other_Sudoku);
     // move
-    Sudoku(Sudoku&& other_Sudoku);
+    Sudoku(Sudoku&& other_Sudoku) noexcept;
     // move assignment
-    Sudoku& operator=(Sudoku&& other_Sudoku);
+    Sudoku& operator=(Sudoku&& other_Sudoku) noexcept;
 
     // element access
     Sudoku_cell& operator()(int cnt);
