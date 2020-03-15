@@ -64,7 +64,7 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 # add include directories for header files)
 #
 # Find includes in corresponding build directories
-include_directories(${PROJECT_SOURCE_DIR}/include /Users/daniel/Programming/cpp/include /Users/daniel/Programming/cpp/include/GSL/include /Users/daniel/Programming/cpp/include/range-v3/include /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include)
+include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/../../../include ${PROJECT_SOURCE_DIR}/../../../include/GSL/include ${PROJECT_SOURCE_DIR}/../../../include/range-v3/include /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include)
 
 #Can manually add the sources using the set command as follows:
 #set(SOURCES hello.cpp)

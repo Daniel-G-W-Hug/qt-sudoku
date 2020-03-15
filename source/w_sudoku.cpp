@@ -69,7 +69,9 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
 
     // draw cell value centered in cell (only if cell is not empty)
     if (s(cnt).val > 0) {
-        qp->setFont(QFont("Helvetica", 24));
+        QFont font("Helvetica");
+        font.setPixelSize(24);
+        qp->setFont(font);
         if (w_s.cell_prop_default[cnt].cell_marked_as_initially_given) {
             // initially given cell values in black
             qp->setPen(QPen(Qt::black, 1, Qt::SolidLine));
@@ -83,7 +85,9 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
     // draw all candidates of cell (if enabled)
     if (w_s.prop.show_candidate_lists) {
 
-        qp->setFont(QFont("Helvetica", 12));
+        QFont font("Helvetica");
+        font.setPixelSize(12);
+        qp->setFont(font);
         qp->setPen(QPen(Qt::black, 1, Qt::SolidLine));
 
         for (const auto& c : s(cnt).cand) {
@@ -91,7 +95,9 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
             // ATTENTION: all drawing commands manually adjusted for cell_size == 50
             //            if cell_size is changed these values must be adjusted as well
 
-            qp->setFont(QFont("Helvetica", 12));
+            QFont font("Helvetica");
+            font.setPixelSize(12);
+            qp->setFont(font);
 
             // mark candidate with bold font, if it is a naked single
             if (w_s.prop.show_naked_singles &&
@@ -101,7 +107,10 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
                     const auto& [cnt1, region, subregion, val1] = e;
                     if (cnt == cnt1 &&
                         c == val1) {    // find value of hidden single and mark bold
-                        qp->setFont(QFont("Helvetica", 12, QFont::Bold));
+                        QFont font("Helvetica");
+                        font.setPixelSize(12);
+                        font.setWeight(QFont::Bold);
+                        qp->setFont(font);
                         break;
                     }
                 }
@@ -115,7 +124,10 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
                     const auto& [cnt1, region, subregion, val1] = e;
                     if (cnt == cnt1 &&
                         c == val1) {    // find value of hidden single and mark bold
-                        qp->setFont(QFont("Helvetica", 12, QFont::Bold));
+                        QFont font("Helvetica");
+                        font.setPixelSize(12);
+                        font.setWeight(QFont::Bold);
+                        qp->setFont(font);
                         break;
                     }
                 }
@@ -130,7 +142,10 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
                     if ((cnt == cnt1 && (c == val1 || c == val2)) ||
                         (cnt == cnt2 && (c == val1 || c == val2))) {
                         // find value of naked twin and mark bold
-                        qp->setFont(QFont("Helvetica", 12, QFont::Bold));
+                        QFont font("Helvetica");
+                        font.setPixelSize(12);
+                        font.setWeight(QFont::Bold);
+                        qp->setFont(font);
                         break;
                     }
                 }
@@ -145,7 +160,10 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
                     if ((cnt == cnt1 && (c == val1 || c == val2)) ||
                         (cnt == cnt2 && (c == val1 || c == val2))) {
                         // find value of hidden twin and mark bold
-                        qp->setFont(QFont("Helvetica", 12, QFont::Bold));
+                        QFont font("Helvetica");
+                        font.setPixelSize(12);
+                        font.setWeight(QFont::Bold);
+                        qp->setFont(font);
                         break;
                     }
                 }
@@ -162,7 +180,10 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
                         (cnt == cnt2 && (c == val1 || c == val2 || c == val3)) ||
                         (cnt == cnt3 && (c == val1 || c == val2 || c == val3))) {
                         // find values of naked triple and mark bold
-                        qp->setFont(QFont("Helvetica", 12, QFont::Bold));
+                        QFont font("Helvetica");
+                        font.setPixelSize(12);
+                        font.setWeight(QFont::Bold);
+                        qp->setFont(font);
                         break;
                     }
                 }
@@ -179,7 +200,10 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
                         (cnt == cnt2 && (c == val1 || c == val2 || c == val3)) ||
                         (cnt == cnt3 && (c == val1 || c == val2 || c == val3))) {
                         // find values of hidden triple and mark bold
-                        qp->setFont(QFont("Helvetica", 12, QFont::Bold));
+                        QFont font("Helvetica");
+                        font.setPixelSize(12);
+                        font.setWeight(QFont::Bold);
+                        qp->setFont(font);
                         break;
                     }
                 }
@@ -201,7 +225,10 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
                         (cnt == cnt4 &&
                          (c == val1 || c == val2 || c == val3 || c == val4))) {
                         // find values of naked quadruple and mark bold
-                        qp->setFont(QFont("Helvetica", 12, QFont::Bold));
+                        QFont font("Helvetica");
+                        font.setPixelSize(12);
+                        font.setWeight(QFont::Bold);
+                        qp->setFont(font);
                         break;
                     }
                 }
