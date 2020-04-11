@@ -59,7 +59,12 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
     const QRect cell_view(0, 0, cell_size, cell_size);
 
     qp->setPen(QPen(Qt::black, 1, Qt::SolidLine));
-    if (w_s.prop.show_block_background && (s(cnt).bi % 2 != 0)) {
+    // if (w_s.prop.show_block_background && (s(cnt).bi % 2 != 0)) {
+    if (w_s.prop.show_block_background &&
+        ((s.blocks_per_row % 2 != 0)
+             ? (s(cnt).bi % 2 != 0)
+             : ((s(cnt).bi / s.blocks_per_row % 2 == 0) ? (s(cnt).bi % 2 != 0)
+                                                        : (s(cnt).bi % 2 == 0)))) {
         // qp->setBrush(QBrush(Qt::lightGray, Qt::SolidPattern));
         qp->setBrush(QBrush(QColor(240, 240, 240), Qt::SolidPattern));
     } else {
@@ -84,7 +89,6 @@ void w_Sudoku_cell::draw_w_Sudoku_cell(QPainter* qp) {
 
     // draw all candidates of cell (if enabled)
     if (w_s.prop.show_candidate_lists) {
-
         QFont font("Helvetica");
         font.setPixelSize(12);
         qp->setFont(font);
@@ -436,14 +440,14 @@ w_Sudoku::w_Sudoku(Sudoku& t_s, QPlainTextEdit* t_textConsole, QWidget* parent) 
     }
 
     // resize to and define minimum size of w_Sudoku
-    // int widget_size = s.region_size * cell_widgets[0]->size();
-    // resize(widget_size, widget_size);
-    // setMinimumSize(widget_size, widget_size);
-    // setMaximumSize(widget_size, widget_size);
+    int widget_size = s.region_size * cell_widgets[0]->size();
+    resize(widget_size, widget_size);
+    setMinimumSize(widget_size, widget_size);
+    setMaximumSize(widget_size, widget_size);
 
-    resize(450, 450);
-    setMinimumSize(450, 450);
-    setMaximumSize(450, 450);
+    // resize(450, 450);
+    // setMinimumSize(450, 450);
+    // setMaximumSize(450, 450);
 
     // activate w_Sudoku layout
     QVBoxLayout* layout = new QVBoxLayout;

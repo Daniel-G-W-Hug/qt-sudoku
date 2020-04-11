@@ -1,0 +1,13 @@
+# 
+# Eingabedatei für Sudoku (Kommentarzeilen mit # werden ignoriert)
+#
+### Dimension N
+4
+### Anzahl Blöcke (Z,S)
+2 2
+### (Sudoku-Zeilen, nicht belegte Zellen sind mit 0 belegt)
+1 0 2 0
+0 2 0 0
+0 0 3 0
+0 0 0 4
+
