@@ -1,15 +1,18 @@
 # 
-# Eingabedatei für Sudoku (Kommentarzeilen mit # werden ignoriert)
+# Eingabedatei fuer Sudoku (Kommentarzeilen mit # werden ignoriert)
 #
-### Regionsgröße, Blocks pro Reihe und Blocks pro Spalte
-#                 -> Gesamtgröße = Regionsgröße * Regionsgröße
-#                 -> Blocks pro Reihe * Blocks pro Spalte = Regionsgröße
-6 2 3
+### Regionsgroesse, Blocks pro Reihe und Blocks pro Spalte
+#                 -> Gesamtgroesse = Regionsgroesse * Regionsgroesse
+#                 -> Blocks pro Reihe * Blocks pro Spalte = Regionsgroesse
+9 3 3
 ### (Sudoku-Zeilen, nicht belegte Zellen sind mit 0 belegt)
-3 0 6 0 0 0
-0 0 0 0 2 3
-5 1 0 0 0 0
-0 0 0 0 3 0
-4 0 5 0 0 0
-0 0 0 5 0 4
+8 0 0 0 0 0 0 0 0
+0 0 3 6 0 0 0 0 0
+0 7 0 0 9 0 2 0 0
+0 5 0 0 0 7 0 0 0
+0 0 0 0 4 5 7 0 0
+0 0 0 1 0 0 0 3 0
+0 0 1 0 0 0 0 6 8
+0 0 8 5 0 0 0 1 0
+0 9 0 0 0 0 4 0 0
 

@@ -15,11 +15,11 @@
 cmake_minimum_required(VERSION 3.13)
 
 #
-### to use gcc-9 and g++-9 instead of clang  (must come before project line)
+### to use gcc-10 and g++-10 instead of clang  (must come before project line)
 #
 # set following lines to comment to use clang
-#set(CMAKE_C_COMPILER "gcc-9")
-#set(CMAKE_CXX_COMPILER "g++-9")
+set(CMAKE_C_COMPILER "gcc-10")
+set(CMAKE_CXX_COMPILER "g++-10")
 
 #
 # project name (=identical to executable name)
@@ -30,7 +30,7 @@ project(sudoku)
 # Compiler flags (since cmake 3.12.2 supported: 98, 11, 14, 17, and 20)
 #
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3 -std=c++17 -Wall -pedantic -Wno-sign-compare -Wno-invalid-source-encoding")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++17 -Wall -pedantic -Wno-sign-compare -Wno-invalid-source-encoding")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++17 -Wall -DGSL_THROW_ON_CONTRACT_VIOLATION")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++17 -Wall -DGSL_UNENFORCED_ON_CONTRACT_VIOLATION")
 
