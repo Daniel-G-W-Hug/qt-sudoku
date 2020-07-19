@@ -15,11 +15,14 @@
 cmake_minimum_required(VERSION 3.13)
 
 #
-### to use gcc-10 and g++-10 instead of clang  (must come before project line)
+### to use gcc-10 and g++-10 instead of default c / c++ (must come before project line)
 #
-# set following lines to comment to use clang
-set(CMAKE_C_COMPILER "gcc-10")
-set(CMAKE_CXX_COMPILER "g++-10")
+#set(CMAKE_C_COMPILER "gcc-10")
+#set(CMAKE_CXX_COMPILER "g++-10")
+
+# set following lines to comment to use clang instead of default c / c++
+#set(CMAKE_C_COMPILER "clang")
+#set(CMAKE_CXX_COMPILER "clang++")
 
 #
 # project name (=identical to executable name)
