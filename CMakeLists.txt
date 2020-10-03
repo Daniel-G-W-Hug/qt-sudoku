@@ -5,7 +5,7 @@
 #├── CMakeLists.txt
 #├── include
 #|   └── *.h
-#└── source
+#└── src
 #    └── *.cpp
 #
 ##################################################
@@ -24,16 +24,34 @@ cmake_minimum_required(VERSION 3.13)
 #set(CMAKE_C_COMPILER "clang")
 #set(CMAKE_CXX_COMPILER "clang++")
 
+# find_program(CLANGTIDY clang-tidy)
+# if(CLANGTIDY)
+# 	set(CMAKE_CXX_CLANG_TIDY ${CLANGTIDY})
+# else()
+# 	message(SEND_ERROR "clang-tidy requested, but executable not found")
+# endif()
+
+# find_program(CPPCHECK cppcheck)
+# if(CPPCHECK)
+# 	set(CMAKE_CXX_CPPCHECK ${CPPCHECK})
+# else()
+# 	message(SEND_ERROR "cppcheck requested, but executable not found")
+# endif()
+
 #
 # project name (=identical to executable name)
 #
 project(sudoku)
 
+#globally define the required C++ Standard; supported: 98, 11, 14, 17, and 20 (since cmake 3.12.2)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 #
-# Compiler flags (since cmake 3.12.2 supported: 98, 11, 14, 17, and 20)
+# Compiler flags (since cmake 3.12.2 )
 #
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++17 -Wall -pedantic -Wno-sign-compare -Wno-invalid-source-encoding")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -pedantic -Wno-sign-compare -Wno-invalid-source-encoding")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++17 -Wall -DGSL_THROW_ON_CONTRACT_VIOLATION")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++17 -Wall -DGSL_UNENFORCED_ON_CONTRACT_VIOLATION")
 
@@ -49,31 +67,24 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++17 -Wall -pedantic -Wno-sign
 #
 # configure qt
 #
-# Instruct CMake to run moc automatically when needed.
+# Instruct CMake to run moc et.al. automatically when needed.
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-if(CMAKE_VERSION VERSION_LESS "3.7.0")
-    set(CMAKE_INCLUDE_CURRENT_DIR ON)
-endif()
-# Find the QtWidgets library
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-#find_package(Qt5Widgets)
-#find_package(Qt5Core)
-#find_package(Qt5Gui)
-#get_target_property(QtCore_location Qt5::Core LOCATION)
 
 #
 # add include directories for header files)
 #
 # Find includes in corresponding build directories
-include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/../../../include ${PROJECT_SOURCE_DIR}/../../../include/GSL/include ${PROJECT_SOURCE_DIR}/../../../include/range-v3/include /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include)
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/../../../include)
+include_directories(/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include)
 
 #Can manually add the sources using the set command as follows:
 #set(SOURCES hello.cpp)
 
 #However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES source/*.cpp include/*.h)
+file(GLOB SOURCES src/*.cpp include/*.h)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
@@ -90,6 +101,6 @@ target_link_libraries(${PROJECT_NAME} fmt::fmt)
 #
 # Use the Widgets module from Qt 5.
 #
-#target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::Core Qt5::Gui)
+# Find the QtWidgets library
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
-
