@@ -158,16 +158,16 @@ class w_Sudoku : public QWidget {
   Sudoku& s;  // Sudoku memory managed by caller
   QPlainTextEdit* textConsole;
 
-  vector<Sudoku> undo;
+  std::vector<Sudoku> undo;
 
-  vector<w_Sudoku_cell*> cell_widgets;
-  vector<QHBoxLayout*> row_widgets;
+  std::vector<w_Sudoku_cell*> cell_widgets;
+  std::vector<QHBoxLayout*> row_widgets;
 
-  vector<w_Sudoku_dyn_cell_properties> dyn_cell_prop_default;
-  vector<w_Sudoku_dyn_cell_properties> dyn_cell_prop;
+  std::vector<w_Sudoku_dyn_cell_properties> dyn_cell_prop_default;
+  std::vector<w_Sudoku_dyn_cell_properties> dyn_cell_prop;
 
-  vector<w_Sudoku_cell_properties> cell_prop_default;
-  vector<w_Sudoku_cell_properties> cell_prop;
+  std::vector<w_Sudoku_cell_properties> cell_prop_default;
+  std::vector<w_Sudoku_cell_properties> cell_prop;
 
   single_vec naked_singles;
   single_vec hidden_singles;

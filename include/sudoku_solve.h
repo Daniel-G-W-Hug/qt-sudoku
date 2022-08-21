@@ -41,7 +41,7 @@ enum Sudoku_solution_t {
 //////////////////////////////////////////////////////////////////////////////////////////
 // solution types for printing
 //////////////////////////////////////////////////////////////////////////////////////////
-const map<Sudoku_solution_t, string> Sudoku_solution_type{
+const std::map<Sudoku_solution_t, std::string> Sudoku_solution_type{
     {Sudoku_solution_t::naked_single, "single"},
     {Sudoku_solution_t::hidden_single, "hidden single"},
     {Sudoku_solution_t::naked_twin, "twin"},
@@ -57,22 +57,22 @@ const map<Sudoku_solution_t, string> Sudoku_solution_type{
 // single solution type vector (size() = no. of solutions of this type):
 //
 // tuple< cnt (=cell no.), region, subregion, val>
-using single_vec = vector<tuple<int, Region_t, int, int>>;
+using single_vec = std::vector<std::tuple<int, Region_t, int, int>>;
 
 // twin solution type vector (size() = no. of solutions of this type):
 //
 // tuple< cnt1, cnt2, region, subregion, val1, val2>
-using twin_vec = vector<tuple<int, int, Region_t, int, int, int>>;
+using twin_vec = std::vector<std::tuple<int, int, Region_t, int, int, int>>;
 
 // triple solution type vector (size() = no. of solutions of this type):
 //
 // tuple< cnt1, cnt2, cnt3, region, subregion, val1, val2, val3>
-using triple_vec = vector<tuple<int, int, int, Region_t, int, int, int, int>>;
+using triple_vec = std::vector<std::tuple<int, int, int, Region_t, int, int, int, int>>;
 
 // quadruple solution type vector (size() = no. of solutions of this type):
 //
 // tuple< cnt1, cnt2, cnt3, cnt4, region, subregion, val1, val2, val3, val4>
-using quad_vec = vector<tuple<int, int, int, int, Region_t, int, int, int, int, int>>;
+using quad_vec = std::vector<std::tuple<int, int, int, int, Region_t, int, int, int, int, int>>;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //  routines to solve Sudoku

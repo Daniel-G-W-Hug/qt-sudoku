@@ -61,8 +61,8 @@ class Region_access {
     void init_access();
 
     // access to region(i)
-    vector<Sudoku_cell*>& operator()(int i);
-    const vector<Sudoku_cell*>& operator()(int i) const;
+    std::vector<Sudoku_cell*>& operator()(int i);
+    const std::vector<Sudoku_cell*>& operator()(int i) const;
     // element access at region(i,j)
     Sudoku_cell& operator()(int i, int j);
     const Sudoku_cell& operator()(int i, int j) const;

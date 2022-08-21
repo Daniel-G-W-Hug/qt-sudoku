@@ -3,12 +3,12 @@
 
 #include "dyn_assert.h"
 
-void dynamic_assert(bool assertion, string message) {
+void dynamic_assert(bool assertion, std::string message) {
     if (assertion) {
         return;
     } else {
-        cout << message << "\n";
-        cout << "Terminating.\n";
-        terminate();
+        std::cout << message << "\n";
+        std::cout << "Terminating.\n";
+        std::terminate();
     }
 }

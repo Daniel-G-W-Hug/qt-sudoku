@@ -1,58 +1,53 @@
-#
-# directory structure: . ├── build ├── CMakeLists.txt ├── include |   └── *.h
-# └── src └── *.cpp
+#[[
+# directory structure:
+# .
+# ├── build
+# ├── CMakeLists.txt
+# ├── include
+# |   └── *.[h|hpp]
+# └── source
+#     └── *.[cpp|cxx]
 #
 # ##############################################################################
-# usage: execute "cmake .." from build directory
+# to configure execute from build directory:
+#                cmake ..
+#             or cmake .. -G "Ninja"
+#             or cmake .. -G "Visual Studio 17 2022" -T host=x64 -A x64
+#
+# to build execute from build directory:
+#                  
+#                cmake --build .
+#             or ninja
+#            
 # ##############################################################################
+#]]
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.23)
 
-#
-# to use gcc-10 and g++-10 instead of default c / c++ (must come before project
-# line)
-#
-# set(CMAKE_C_COMPILER "gcc-10") set(CMAKE_CXX_COMPILER "g++-10")
+include(FetchContent)
 
-# set following lines to comment to use clang instead of default c / c++
-# set(CMAKE_C_COMPILER "clang") set(CMAKE_CXX_COMPILER "clang++")
+# to use gcc-12 and g++-12 (must come before project line)
+#[[
+# set(CMAKE_C_COMPILER "gcc-12")
+# set(CMAKE_CXX_COMPILER "g++-12")
+#]]
 
-# find_program(CLANGTIDY clang-tidy) if(CLANGTIDY) set(CMAKE_CXX_CLANG_TIDY
-# ${CLANGTIDY}) else() message(SEND_ERROR "clang-tidy requested, but executable
-# not found") endif()
+project(sudoku
+        VERSION 0.1
+        LANGUAGES C CXX)
 
-# find_program(CPPCHECK cppcheck) if(CPPCHECK) set(CMAKE_CXX_CPPCHECK
-# ${CPPCHECK}) else() message(SEND_ERROR "cppcheck requested, but executable not
-# found") endif()
-
-#
-# project name (=identical to executable name)
-#
-project(sudoku)
 
 # globally define the required C++ Standard; supported: 98, 11, 14, 17, and 20
 # (since cmake 3.12.2)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-#
-# Compiler flags (since cmake 3.12.2 )
-#
-set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -O3 -Wall -pedantic -Wno-sign-compare -Wno-invalid-source-encoding"
-)
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++17 -Wall
-# -DGSL_THROW_ON_CONTRACT_VIOLATION") set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g
-# -std=c++17 -Wall -DGSL_UNENFORCED_ON_CONTRACT_VIOLATION")
-
-# // GSL usage for error handling of pre-/post conditions (use via #include
-# "gsl/gsl") // // There are three configuration options for this GSL
-# implementation's behavior // when pre/post conditions on the GSL types are
-# violated: // // 1. GSL_TERMINATE_ON_CONTRACT_VIOLATION: std::terminate will be
-# called (default) // 2. GSL_THROW_ON_CONTRACT_VIOLATION: a gsl::fail_fast
-# exception will be thrown // 3. GSL_UNENFORCED_ON_CONTRACT_VIOLATION: nothing
-# happens
+# make fmt available
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG master)
+FetchContent_MakeAvailable(fmt)
 
 #
 # configure qt
@@ -62,40 +57,69 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+
+# set a default build type: Debug | RelWithDebInfo | Release | MinSizeRel
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Debug")
+  message(STATUS "Build type not specified: use Debug mode by default.")
+endif()
+
+if(CMAKE_BUILD_TYPE EQUAL "Debug")
+  if(MSVC)
+    # warning level 4 and all warnings as errors
+    add_compile_options(/W4 /WX)
+  else()
+    # lots of warnings and all warnings as errors
+    add_compile_options(-Wall -Wextra -pedantic -Werror)
+  endif()
+endif()
+
 #
 # add include directories for header files)
 #
 # Find includes in corresponding build directories
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/../../../include)
-include_directories(
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
-)
+# include_directories(${PROJECT_SOURCE_DIR}/include)
+# include_directories(${PROJECT_SOURCE_DIR}/../../../include)
+# include_directories(
+#   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
+# )
 
-# Can manually add the sources using the set command as follows: set(SOURCES
-# hello.cpp)
+set(SOURCES src/main.cpp
+            src/dyn_assert.cpp
+            src/sudoku_class.cpp
+            src/sudoku_print.cpp
+            src/sudoku_solve.cpp
+            src/sudoku_solve_helper.cpp
+            src/w_sudoku.cpp
+            src/w_sudoku_view.cpp
+            )
 
-# However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES src/*.cpp include/*.h)
+set(HEADERS include/dyn_assert.h
+            include/PlainTextEditIODevice.h
+            include/sudoku_class.h
+            include/sudoku_print.h
+            include/sudoku_read.h
+            include/sudoku_solve.h
+            include/sudoku_solve_helper.h
+            include/w_sudoku.h
+            include/w_sudoku_view.h
+            )
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+
+set(EXEC_NAME ${PROJECT_NAME})
+add_executable(${EXEC_NAME} ${HEADERS} ${SOURCES})
+
+# target link libraries have to be added AFTER add_executable or add_library!
+target_include_directories(${EXEC_NAME} PRIVATE include)
+target_include_directories(${EXEC_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(${EXEC_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/../../include)
 
 #
 # add target_link_libraries AFTER definition of executable!
 #
-
-#
-# fmt library
-#
-find_package(fmt)
-target_link_libraries(${PROJECT_NAME} fmt::fmt)
-
-#
-# Use the Widgets module from Qt 6.
-#
-# Find the QtWidgets library
 find_package(
   Qt6
   COMPONENTS Widgets
   REQUIRED)
-target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
+
+target_link_libraries(${EXEC_NAME} fmt::fmt Qt6::Widgets)

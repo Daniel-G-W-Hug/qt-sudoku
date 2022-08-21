@@ -7,6 +7,4 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
-void dynamic_assert(bool assertion, string message);
+void dynamic_assert(bool assertion, std::string message);
