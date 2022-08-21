@@ -15,10 +15,10 @@
 #             or cmake .. -G "Visual Studio 17 2022" -T host=x64 -A x64
 #
 # to build execute from build directory:
-#                  
+#
 #                cmake --build .
 #             or ninja
-#            
+#
 # ##############################################################################
 #]]
 
@@ -32,10 +32,10 @@ include(FetchContent)
 # set(CMAKE_CXX_COMPILER "g++-12")
 #]]
 
-project(sudoku
-        VERSION 0.1
-        LANGUAGES C CXX)
-
+project(
+  sudoku
+  VERSION 0.1
+  LANGUAGES C CXX)
 
 # globally define the required C++ Standard; supported: 98, 11, 14, 17, and 20
 # (since cmake 3.12.2)
@@ -56,7 +56,6 @@ FetchContent_MakeAvailable(fmt)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-
 
 # set a default build type: Debug | RelWithDebInfo | Release | MinSizeRel
 if(NOT CMAKE_BUILD_TYPE)
@@ -81,30 +80,29 @@ endif()
 # include_directories(${PROJECT_SOURCE_DIR}/include)
 # include_directories(${PROJECT_SOURCE_DIR}/../../../include)
 # include_directories(
-#   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
+# /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
 # )
 
-set(SOURCES src/main.cpp
-            src/dyn_assert.cpp
-            src/sudoku_class.cpp
-            src/sudoku_print.cpp
-            src/sudoku_solve.cpp
-            src/sudoku_solve_helper.cpp
-            src/w_sudoku.cpp
-            src/w_sudoku_view.cpp
-            )
+set(SOURCES
+    src/main.cpp
+    src/dyn_assert.cpp
+    src/sudoku_class.cpp
+    src/sudoku_print.cpp
+    src/sudoku_solve.cpp
+    src/sudoku_solve_helper.cpp
+    src/w_sudoku.cpp
+    src/w_sudoku_view.cpp)
 
-set(HEADERS include/dyn_assert.h
-            include/PlainTextEditIODevice.h
-            include/sudoku_class.h
-            include/sudoku_print.h
-            include/sudoku_read.h
-            include/sudoku_solve.h
-            include/sudoku_solve_helper.h
-            include/w_sudoku.h
-            include/w_sudoku_view.h
-            )
-
+set(HEADERS
+    include/dyn_assert.h
+    include/PlainTextEditIODevice.h
+    include/sudoku_class.h
+    include/sudoku_print.h
+    include/sudoku_read.h
+    include/sudoku_solve.h
+    include/sudoku_solve_helper.h
+    include/w_sudoku.h
+    include/w_sudoku_view.h)
 
 set(EXEC_NAME ${PROJECT_NAME})
 add_executable(${EXEC_NAME} ${HEADERS} ${SOURCES})
@@ -112,7 +110,8 @@ add_executable(${EXEC_NAME} ${HEADERS} ${SOURCES})
 # target link libraries have to be added AFTER add_executable or add_library!
 target_include_directories(${EXEC_NAME} PRIVATE include)
 target_include_directories(${EXEC_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
-target_include_directories(${EXEC_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/../../include)
+target_include_directories(${EXEC_NAME}
+                           PRIVATE ${CMAKE_SOURCE_DIR}/../../include)
 
 #
 # add target_link_libraries AFTER definition of executable!
@@ -122,4 +121,4 @@ find_package(
   COMPONENTS Widgets
   REQUIRED)
 
-target_link_libraries(${EXEC_NAME} fmt::fmt Qt6::Widgets)
+target_link_libraries(${EXEC_NAME} fmt::fmt-header-only Qt6::Widgets)
