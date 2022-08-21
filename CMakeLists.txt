@@ -35,7 +35,7 @@ include(FetchContent)
 project(
   sudoku
   VERSION 0.1
-  LANGUAGES C CXX)
+  LANGUAGES CXX)
 
 # globally define the required C++ Standard; supported: 98, 11, 14, 17, and 20
 # (since cmake 3.12.2)
@@ -72,16 +72,6 @@ if(CMAKE_BUILD_TYPE EQUAL "Debug")
     add_compile_options(-Wall -Wextra -pedantic -Werror)
   endif()
 endif()
-
-#
-# add include directories for header files)
-#
-# Find includes in corresponding build directories
-# include_directories(${PROJECT_SOURCE_DIR}/include)
-# include_directories(${PROJECT_SOURCE_DIR}/../../../include)
-# include_directories(
-# /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
-# )
 
 set(SOURCES
     src/main.cpp
