@@ -24,18 +24,11 @@
 
 cmake_minimum_required(VERSION 3.25)
 
-# to use gcc-12 and g++-12 (must come before project line)
+# to use gcc-13 and g++-13 (must come before project line)
 #[[
-# set(CMAKE_C_COMPILER "gcc-12")
-# set(CMAKE_CXX_COMPILER "g++-12")
+# set(CMAKE_C_COMPILER "gcc-13")
+# set(CMAKE_CXX_COMPILER "g++-13")
 #]]
-
-# CMAKE_TOOLCHAIN_FILE must be defined BEFORE project(...)!
-if(WIN32)
-  set(CMAKE_TOOLCHAIN_FILE "C:/Users/danie/prg/cpp/vcpkg/scripts/buildsystems/vcpkg.cmake")
-else()
-  set(CMAKE_TOOLCHAIN_FILE "/Users/daniel/prg/cpp/vcpkg/scripts/buildsystems/vcpkg.cmake")
-endif()
 
 project(
   sudoku
@@ -44,13 +37,6 @@ project(
 
 # set(CMAKE_VERBOSE_MAKEFILE ON)  // alternative: make VERBOSE=1
 # add_definitions(-Dxxx)
-
-# make sure cmake is called with indication of CMAKE_TOOLCHAIN_FILE (vcpkg)
-# e.g. via .zshrc export CMAKE_TOOLCHAIN_FILE="/Users/daniel/prg/cpp/vcpkg/scripts/buildsystems/vcpkg.cmake"
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  message(FATAL_ERROR
-          "CMAKE_TOOLCHAIN_FILE must be defined to use vcpkg. Configuration aborted.")
-endif()
 
 # globally define the required C++ Standard; supported: 98, 11, 14, 17, and 20
 # (since cmake 3.12.2)
